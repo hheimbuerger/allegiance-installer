@@ -10,7 +10,7 @@ SetCompressor lzma
 !define PRODUCT_UNINST_KEY "Software\Microsoft\Windows\CurrentVersion\Uninstall\${PRODUCT_NAME}"
 !define PRODUCT_UNINST_ROOT_KEY "HKLM"
 
-; MUI 1.67 compatible ------
+; enable Modern User Interface (MUI)
 !include "MUI.nsh"
 
 ; MUI Settings
@@ -66,6 +66,7 @@ Section "Allegiance Game" SEC01
   DetailPrint "- Files Extracted!"
 SectionEnd
 
+; Visual C++ 2008 runtimes - This option will be removed
 Section "Install English C++ Runtime" SEC03
   SetDetailsPrint both
   DetailPrint "Installing C++ Runtime..."
@@ -81,6 +82,7 @@ Section "Install English C++ Runtime" SEC03
   DetailPrint "- C++ Runtime Installed!"
 SectionEnd
 
+; Register DLLs - these files don't exist - will be removed
 Section -TypeLibraries
   SetDetailsPrint both
   DetailPrint "Registering Type Libraries..."
@@ -94,6 +96,7 @@ Section -TypeLibraries
   DetailPrint "- Libraries Registered!"
 SectionEnd
 
+; Option to unpack OGG files to wave - ogg decoder won't get deleted
 Section /o "Unpack OGG Files" SEC02
   SetDetailsPrint both
   DetailPrint "Decoding audio files... "
@@ -106,6 +109,7 @@ Section /o "Unpack OGG Files" SEC02
   DetailPrint "- Audio Decoded!"
 SectionEnd
 
+; Shortcuts for Startmenu/Desktop - This needs an option, because desktop icons are annoying
 Section -AdditionalIcons
   SetDetailsPrint both
   DetailPrint "Creating Icons..."
@@ -124,23 +128,38 @@ Section -Post
   SetDetailsPrint both
   DetailPrint "Creating Uninstaller..."
   SetDetailsPrint textonly
+
+  ; Writing Uninstaller information
   WriteUninstaller "$INSTDIR\uninst.exe"
   WriteRegStr ${PRODUCT_UNINST_ROOT_KEY} "${PRODUCT_UNINST_KEY}" "DisplayName" "$(^Name)"
   WriteRegStr ${PRODUCT_UNINST_ROOT_KEY} "${PRODUCT_UNINST_KEY}" "UninstallString" "$INSTDIR\uninst.exe"
   WriteRegStr ${PRODUCT_UNINST_ROOT_KEY} "${PRODUCT_UNINST_KEY}" "DisplayVersion" "${PRODUCT_VERSION}"
   WriteRegStr ${PRODUCT_UNINST_ROOT_KEY} "${PRODUCT_UNINST_KEY}" "URLInfoAbout" "${PRODUCT_WEB_SITE}"
   WriteRegStr ${PRODUCT_UNINST_ROOT_KEY} "${PRODUCT_UNINST_KEY}" "Publisher" "${PRODUCT_PUBLISHER}"
+
+  ; Artpath
   WriteRegStr HKLM "Software\Microsoft\Microsoft Games\Allegiance\1.0" "ArtPath" "$INSTDIR\Artwork"
+  ; EXE Path - Install directory of Allegiance.exe
   WriteRegStr HKLM "Software\Microsoft\Microsoft Games\Allegiance\1.0" "EXE Path" "$INSTDIR"
+  ; CfgFile - Where to get config file
   WriteRegStr HKLM "Software\Microsoft\Microsoft Games\Allegiance\1.0" "CfgFile" "http://autoupdate.alleg.net/allegiance.cfg"
+  ; CDKey - still used?
   WriteRegStr HKLM "Software\Microsoft\Microsoft Games\Allegiance\1.0" "CDKey" "FERAL-1234567890123456"
+  ; FIRSTRUN - still used?
   WriteRegDWORD HKLM "Software\Microsoft\Microsoft Games\Allegiance\1.0" "FIRSTRUN" "1"
+  ; HasTrained - Disables Training mission popup
   WriteRegDWORD HKLM "Software\Microsoft\Microsoft Games\Allegiance\1.0" "HasTrained" "1"
+  ; BETA ArtPath - Defines Artwork path
   WriteRegStr HKLM "Software\Microsoft\Microsoft Games\Allegiance\1.1" "ArtPath" "$INSTDIR\Artwork"
+  ; BETA EXE Path - This is why ASGS overwrites Allegiance.exe in beta mode
   WriteRegStr HKLM "Software\Microsoft\Microsoft Games\Allegiance\1.1" "EXE Path" "$INSTDIR"
+  ; BETA CfgFile
   WriteRegStr HKLM "Software\Microsoft\Microsoft Games\Allegiance\1.1" "CfgFile" "http://fazdev.alleg.net/FAZ/FAZbeta.cfg"
+  ; BETA CDKey
   WriteRegStr HKLM "Software\Microsoft\Microsoft Games\Allegiance\1.1" "CDKey" "FERAL-1234567890123456"
+  ; BETA FIRSTRUN
   WriteRegDWORD HKLM "Software\Microsoft\Microsoft Games\Allegiance\1.1" "FIRSTRUN" "1"
+  ; BETA HasTrained
   WriteRegDWORD HKLM "Software\Microsoft\Microsoft Games\Allegiance\1.1" "HasTrained" "1"
   SetDetailsPrint both
   DetailPrint "- Installation Complete!"
@@ -148,21 +167,25 @@ SectionEnd
 
 ; Section descriptions
 !insertmacro MUI_FUNCTION_DESCRIPTION_BEGIN
+  ; THIS CAKE IS A LIE!
   !insertmacro MUI_DESCRIPTION_TEXT ${SEC01} "Includes all required components to play Allegiance."
   !insertmacro MUI_DESCRIPTION_TEXT ${SEC02} "Transcodes the game audio from OGG to WAV.$\r$\rThis option is only recommended for slow computers and will increase install time."
   !insertmacro MUI_DESCRIPTION_TEXT ${SEC03} "Visual C++ 2008 SP1 ENGLISH Runtime.$\r$\rDO NOT INSTALL THIS IF YOUR COMPUTER'S LANGUAGE IS NOT ENGLISH!$\r$\rIf you've installed these runtimes in the past, you do not need to install them again.$\r$\rIf you are not sure and have an English computer, leave this item selected."
 !insertmacro MUI_FUNCTION_DESCRIPTION_END
 
+; Uninstaller - success message
 Function un.onUninstSuccess
   HideWindow
   MessageBox MB_ICONINFORMATION|MB_OK "$(^Name) was successfully removed from your computer."
 FunctionEnd
 
+; Uninstaller - initial message
 Function un.onInit
   MessageBox MB_ICONQUESTION|MB_YESNO|MB_DEFBUTTON2 "NOTICE: This uninstaller will remove ALL files and directories in the $(^Name) directory, including ones not placed there by the installer.  If you wish to save any of those files, click NO and back them up before proceeding.$\r$\rAre you sure you want to completely remove $(^Name) and all of its components?" IDYES +2
   Abort
 FunctionEnd
 
+; .net framework 2.0 installer check
 Function .onInit
   ReadRegStr $0 HKLM "SOFTWARE\Microsoft\.NETFramework\policy\v2.0" "50727"
   IfErrors 0 DotNetInstalled
@@ -171,6 +194,7 @@ Function .onInit
   DotNetInstalled:
 FunctionEnd
 
+; Uninstaller - remove files
 Section Uninstall
   SetDetailsPrint both
   DetailPrint "Please wait while Allegiance is uninstalled."
