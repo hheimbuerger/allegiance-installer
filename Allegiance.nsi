@@ -13,6 +13,9 @@ SetCompressor lzma
 ; enable Modern User Interface (MUI)
 !include "MUI.nsh"
 
+; x64 detector
+!include "x64.nsh"
+
 ; MUI Settings
 !define MUI_ABORTWARNING
 !define MUI_WELCOMEFINISHPAGE_BITMAP ".\Resources\Bitmaps\splash.bmp"
@@ -185,14 +188,10 @@ Function un.onInit
   Abort
 FunctionEnd
 
-; .net framework 2.0 installer check
+; Initailisation of installer
 Function .onInit
   Call WindowsVersionCheck
-  ReadRegStr $0 HKLM "SOFTWARE\Microsoft\.NETFramework\policy\v2.0" "50727"
-  IfErrors 0 DotNetInstalled
-  MessageBox MB_ICONINFORMATION|MB_OK "$(^Name) requires the Microsoft .NET framework version 2.0.$\r$\rYou can install it via WindowsUpdate, at http://windowsupdate.microsoft.com."
-  Abort
-  DotNetInstalled:
+  Call DotNetVersionCheck
 FunctionEnd
 
 ; Uninstaller - remove files
@@ -229,7 +228,7 @@ Function WindowsVersionCheck
   StrCmp $R0 "5.1" 0 jm_Success
   
   ; Check for installed service pack, we need SP2 or SP3
-  ReadRegDWORD $R0 HKLM "System\CurrentControlSet\Control\Windows" "CSDVersion"
+  ReadRegDWORD $R0 HKLM "SOFTWARE\Microsoft\Windows NT\CurrentVersion" "CSDVersion"
   StrCmp $R0 "Service Pack 2" jm_Success
   StrCmp $R0 "Service Pack 2b" jm_Success
   StrCmp $R0 "Service Pack 2c" jm_Success
@@ -246,4 +245,27 @@ Function WindowsVersionCheck
   ; Windows is at least Windows XP SP2 or higher, so contine setup
   jm_Success:
     Exch $R0
+FunctionEnd
+
+; Check if .net framework 2.0 is installed
+Function DotNetVersionCheck
+  Push $R0
+  ReadRegStr $R0 HKLM "SOFTWARE\Microsoft\.NETFramework\policy\v2.0.50727" ""
+  IfErrors 0 DotNetInstalled
+  ; Fire up error, .net framework 2.0 is not installed
+  MessageBox MB_ICONINFORMATION|MB_OK "$(^Name) requires the Microsoft .NET framework version 2.0.$\r$\rDownload and install .net framework 2.0 in your operation system language version.$\r$\r.net Framework 3.x or 4.x are no upgrades of 2.0, they are just different runtime environments."
+   
+  ; Choose between 32 and 64 bit download
+  ${If} ${RunningX64}
+    ; Only for Windows XP x64, because Vista and Win7 should have 2.0 already installed 
+    ExecShell Open "http://www.microsoft.com/downloads/en/details.aspx?FamilyID=B44A0000-ACF8-4FA1-AFFB-40E78D788B00"
+  ${Else}
+    ExecShell Open "http://www.microsoft.com/downloads/en/details.aspx?FamilyID=0856EACB-4362-4B0D-8EDD-AAB15C5E04F5"
+  ${EndIf}
+  ; Exit setup
+  Abort
+   
+  DotNetInstalled:
+  ; We got .net installed, so we contine setup
+  Exch $R0
 FunctionEnd
