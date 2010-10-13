@@ -187,6 +187,7 @@ FunctionEnd
 
 ; .net framework 2.0 installer check
 Function .onInit
+  Call WindowsVersionCheck
   ReadRegStr $0 HKLM "SOFTWARE\Microsoft\.NETFramework\policy\v2.0" "50727"
   IfErrors 0 DotNetInstalled
   MessageBox MB_ICONINFORMATION|MB_OK "$(^Name) requires the Microsoft .NET framework version 2.0.$\r$\rYou can install it via WindowsUpdate, at http://windowsupdate.microsoft.com."
@@ -211,3 +212,38 @@ Section Uninstall
   DeleteRegKey ${PRODUCT_UNINST_ROOT_KEY} "${PRODUCT_UNINST_KEY}"
   SetAutoClose true
 SectionEnd
+
+; Check of Windows version
+Function WindowsVersionCheck
+  Push $R0
+  
+  ; Read registry string of WinNT systems
+  ReadRegStr $R0 HKLM "SOFTWARE\Microsoft\Windows NT\CurrentVersion" "CurrentVersion"
+  ; Windows 9x is no NT system, abort this  
+  IfErrors jm_NoSupport
+   
+  ; We don't support Windows 2000
+  StrCmp $R0 "5.0" jm_NoSupport
+
+  ; If we got Windows XP, we need to check service pack, otherwise we are finished
+  StrCmp $R0 "5.1" 0 jm_Success
+  
+  ; Check for installed service pack, we need SP2 or SP3
+  ReadRegDWORD $R0 HKLM "System\CurrentControlSet\Control\Windows" "CSDVersion"
+  StrCmp $R0 "Service Pack 2" jm_Success
+  StrCmp $R0 "Service Pack 2b" jm_Success
+  StrCmp $R0 "Service Pack 2c" jm_Success
+  StrCmp $R0 "Service Pack 3" jm_Success
+  ; For the case MS releases SP4 for XP
+  StrCmp $R0 "Service Pack 4" jm_Success
+  
+  jm_NoSupport:
+    ; Fire up error, that OS is outdated and not supported
+    MessageBox MB_ICONINFORMATION|MB_OK "$(^Name) requires the Microsoft Windows XP Service Pack 2 or higher."
+    ; Abort setup
+	Abort
+	
+  ; Windows is at least Windows XP SP2 or higher, so contine setup
+  jm_Success:
+    Exch $R0
+FunctionEnd
