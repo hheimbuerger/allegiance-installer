@@ -13,6 +13,9 @@ SetCompressor lzma
 ; enable Modern User Interface (MUI)
 !include "MUI.nsh"
 
+; WinVer
+!include "WinVer.nsh"
+
 ; x64 detector
 !include "x64.nsh"
 
@@ -214,37 +217,20 @@ SectionEnd
 
 ; Check of Windows version
 Function WindowsVersionCheck
-  Push $R0
-  
-  ; Read registry string of WinNT systems
-  ReadRegStr $R0 HKLM "SOFTWARE\Microsoft\Windows NT\CurrentVersion" "CurrentVersion"
-  ; Windows 9x is no NT system, abort this  
-  IfErrors jm_NoSupport
-   
-  ; We don't support Windows 2000
-  StrCmp $R0 "5.0" jm_NoSupport
+  ; At least XP
+  ${If} ${AtLeastWinXP}
+    ; and at least Service Pack 2
+    ${AndIf} ${AtLeastServicePack} 2
+      goto ValidOS
+  ${EndIf}
 
-  ; If we got Windows XP, we need to check service pack, otherwise we are finished
-  StrCmp $R0 "5.1" 0 jm_Success
-  
-  ; Check for installed service pack, we need SP2 or SP3
-  ReadRegDWORD $R0 HKLM "SOFTWARE\Microsoft\Windows NT\CurrentVersion" "CSDVersion"
-  StrCmp $R0 "Service Pack 2" jm_Success
-  StrCmp $R0 "Service Pack 2b" jm_Success
-  StrCmp $R0 "Service Pack 2c" jm_Success
-  StrCmp $R0 "Service Pack 3" jm_Success
-  ; For the case MS releases SP4 for XP
-  StrCmp $R0 "Service Pack 4" jm_Success
-  
-  jm_NoSupport:
-    ; Fire up error, that OS is outdated and not supported
-    MessageBox MB_ICONINFORMATION|MB_OK "$(^Name) requires the Microsoft Windows XP Service Pack 2 or higher."
-    ; Abort setup
-	Abort
-	
-  ; Windows is at least Windows XP SP2 or higher, so contine setup
-  jm_Success:
-    Exch $R0
+  ; Win9x/WinNT/Win2k/WinXPSP1
+  ; Fire up error, that OS is outdated and not supported
+  MessageBox MB_OK|MB_ICONSTOP "$(^Name) requires Microsoft Windows XP Service Pack 2 or higher."
+  ; Abort setup
+  Abort
+
+  ValidOS:
 FunctionEnd
 
 ; Check if .net framework 2.0 is installed
@@ -253,7 +239,7 @@ Function DotNetVersionCheck
   ReadRegStr $R0 HKLM "SOFTWARE\Microsoft\.NETFramework\policy\v2.0.50727" ""
   IfErrors 0 DotNetInstalled
   ; Fire up error, .net framework 2.0 is not installed
-  MessageBox MB_ICONINFORMATION|MB_OK "$(^Name) requires the Microsoft .NET framework version 2.0.$\r$\rDownload and install .net framework 2.0 in your operation system language version.$\r$\r.net Framework 3.x or 4.x are no upgrades of 2.0, they are just different runtime environments."
+  MessageBox MB_OK|MB_ICONSTOP "$(^Name) requires the Microsoft .NET framework version 2.0.$\r$\rDownload and install .net framework 2.0 in your operation system language version.$\r$\r.net Framework 3.x or 4.x are no upgrades of 2.0, they are just different runtime environments."
    
   ; Choose between 32 and 64 bit download
   ${If} ${RunningX64}
