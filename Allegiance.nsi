@@ -55,7 +55,7 @@ RequestExecutionLevel admin
 ; MUI end ------
 
 SetFont "Tahoma" 8
-BrandingText "Free Allegiance R5 (Installer Build 258)"
+BrandingText "Free Allegiance (Installer Build x)"
 
 Name "${PRODUCT_NAME} ${PRODUCT_VERSION}"
 OutFile "Allegiance Setup.exe"
@@ -73,36 +73,6 @@ Section "Allegiance Game" SEC01
   File /r ".\Resources\Allegiance\*.*"
   SetDetailsPrint listonly
   DetailPrint "- Files Extracted!"
-SectionEnd
-
-; Visual C++ 2008 runtimes - This option will be removed
-Section "Install English C++ Runtime" SEC03
-  SetDetailsPrint both
-  DetailPrint "Installing C++ Runtime..."
-  SetDetailsPrint listonly
-  DetailPrint "(this will take several minutes)"
-  SetDetailsPrint none
-  SetOutPath "$INSTDIR"
-  SetOverwrite on
-  File ".\Resources\Redist-x86\vcredist_x86.exe"
-  ExecWait 'vcredist_x86.exe /q:a /c:"VCREDI~3.EXE /q:a /c:""msiexec /i vcredist.msi /qn"" "'
-  Delete "$INSTDIR\vcredist_x86.exe"
-  SetDetailsPrint listonly
-  DetailPrint "- C++ Runtime Installed!"
-SectionEnd
-
-; Register DLLs - these files don't exist - will be removed
-Section -TypeLibraries
-  SetDetailsPrint both
-  DetailPrint "Registering Type Libraries..."
-  SetDetailsPrint none
-  SetOutPath $INSTDIR
-  RegDLL "$INSTDIR\ATL.DLL"
-  RegDLL "$INSTDIR\ATL71.DLL"
-  RegDLL "$INSTDIR\MFC42.DLL"
-  RegDLL "$INSTDIR\MFC71.DLL"
-  SetDetailsPrint listonly
-  DetailPrint "- Libraries Registered!"
 SectionEnd
 
 ; Option to unpack OGG files to wave - ogg decoder won't get deleted
@@ -177,9 +147,8 @@ SectionEnd
 ; Section descriptions
 !insertmacro MUI_FUNCTION_DESCRIPTION_BEGIN
   ; THIS CAKE IS A LIE!
-  !insertmacro MUI_DESCRIPTION_TEXT ${SEC01} "Includes all required components to play Allegiance."
+  !insertmacro MUI_DESCRIPTION_TEXT ${SEC01} "Basic game components."
   !insertmacro MUI_DESCRIPTION_TEXT ${SEC02} "Transcodes the game audio from OGG to WAV.$\r$\rThis option is only recommended for slow computers and will increase install time."
-  !insertmacro MUI_DESCRIPTION_TEXT ${SEC03} "Visual C++ 2008 SP1 ENGLISH Runtime.$\r$\rDO NOT INSTALL THIS IF YOUR COMPUTER'S LANGUAGE IS NOT ENGLISH!$\r$\rIf you've installed these runtimes in the past, you do not need to install them again.$\r$\rIf you are not sure and have an English computer, leave this item selected."
 !insertmacro MUI_FUNCTION_DESCRIPTION_END
 
 ; Uninstaller - success message
@@ -198,6 +167,7 @@ FunctionEnd
 Function .onInit
   Call WindowsVersionCheck
   Call DirectX9Check
+  Call VC90Check
   Call DotNetVersionCheck
 FunctionEnd
 
@@ -239,25 +209,22 @@ FunctionEnd
 
 ; Check if .net framework 2.0 is installed
 Function DotNetVersionCheck
-  Push $R0
-  ReadRegStr $R0 HKLM "SOFTWARE\Microsoft\.NETFramework\policy\v2.0.50727" ""
-  IfErrors 0 DotNetInstalled
+  IfFileExists "$WINDIR\Microsoft.NET\Framework\v2.0.50727\MSBuild.exe" DotNetInstalled
   ; Fire up error, .net framework 2.0 is not installed
-  MessageBox MB_OK|MB_ICONSTOP "$(^Name) requires the Microsoft .NET framework version 2.0.$\r$\rDownload and install .net framework 2.0 in your operation system language version.$\r$\rNote:$\r.net Framework 3.x or 4.x are no upgrades of 2.0, they are just different runtime environments."
+  MessageBox MB_OK|MB_ICONSTOP "$(^Name) requires the Microsoft .NET framework version 2.0.$\r$\rNote:$\r.net Framework 3.x or 4.x are no upgrades of 2.0, they are just different runtime environments."
    
   ; Choose between 32 and 64 bit download
   ${If} ${RunningX64}
     ; Only for Windows XP x64, because Vista and Win7 should have 2.0 already installed 
-    ExecShell Open "http://www.microsoft.com/downloads/en/details.aspx?FamilyID=B44A0000-ACF8-4FA1-AFFB-40E78D788B00"
+    ExecShell Open "http://download.microsoft.com/download/c/6/e/c6e88215-0178-4c6c-b5f3-158ff77b1f38/NetFx20SP2_x64.exe"
   ${Else}
-    ExecShell Open "http://www.microsoft.com/downloads/en/details.aspx?FamilyID=0856EACB-4362-4B0D-8EDD-AAB15C5E04F5"
+    ExecShell Open "http://download.microsoft.com/download/c/6/e/c6e88215-0178-4c6c-b5f3-158ff77b1f38/NetFx20SP2_x86.exe "
   ${EndIf}
   ; Exit setup
   Abort
-   
+
   DotNetInstalled:
   ; We got .net installed, so we contine setup
-  Exch $R0
 FunctionEnd
 
 ; Check if DirectX 9.0c June 2009 or later is installed
@@ -273,4 +240,28 @@ Function DirectX9Check
   
   DirectXInstalled:
   ; Contine installation
+ FunctionEnd
+ 
+; Check if VC9 is installed
+Function VC90Check
+  Push $R0
+  ; http://social.msdn.microsoft.com/Forums/en-US/vssetup/thread/29a56f19-d21d-4cfd-a77b-4667dac8aca0
+  ; http://blogs.msdn.com/b/astebner/archive/2009/01/29/9384143.aspx
+  ReadRegStr $R0 HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\{FF66E9F6-83E7-3A3E-AF14-8DE9A809A6A4}" "DisplayName" ;VC90
+  IfErrors 0 VC90Installed
+  ReadRegStr $R0 HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\{9A25302D-30C0-39D9-BD6F-21E6EC160475}" "DisplayName" ;VC90SP1
+  IfErrors 0 VC90Installed
+  ReadRegStr $R0 HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\{1F1C2DFC-2D24-3E06-BCB8-725134ADF989}" "DisplayName" ;VC90SP1 ATL fix
+  IfErrors 0 VC90Installed
+  
+  ; Fire up error, Visual C++ Redist is not installed
+  MessageBox MB_OK|MB_ICONSTOP "You need to install Visual C++ 2008 runtimes.$\r$\rDownload and install it in your operation system language version.$\r$\rPress OK to contine."
+  ; Run Webinstaller
+  ExecShell Open "http://www.microsoft.com/downloads/en/details.aspx?FamilyID=a5c84275-3b97-4ab7-a40d-3802b2af5fc2"
+  ; Exit setup
+  Abort
+  
+  VC90Installed:
+  ; Contine installation
+  Exch $R0
  FunctionEnd

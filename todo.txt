@@ -1,16 +1,3 @@
 Todo list (10/13/10):
 
-- Make installer check DirectX 9 version
-  - On wrong (outdated) version, start webinstaller
-
-- Make installer check if Visual C++ 2008 runtimes are installed
-  - Open browser with download page (because of different lauganges)
-
-- Make installer check if .net framework 2.0 is installed
-  - Open browser with download page (because of different lauganges)
-
-- Make installer change ACL of Allegiance folder (including subfolders) and registry keys
-
-- Make installer check, if it runs as Administrator
-
 - Remove unused files from artwork (reduces size)
