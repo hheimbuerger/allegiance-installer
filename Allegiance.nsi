@@ -15,19 +15,19 @@ SetCompressor lzma
 
 ; MUI Settings
 !define MUI_ABORTWARNING
-!define MUI_WELCOMEFINISHPAGE_BITMAP "C:\Installer\Resources\Bitmaps\splash.bmp"
+!define MUI_WELCOMEFINISHPAGE_BITMAP ".\Resources\Bitmaps\splash.bmp"
 !define MUI_HEADERIMAGE
 !define MUI_HEADERIMAGE_RIGHT
-!define MUI_HEADERIMAGE_BITMAP "C:\Installer\Resources\Bitmaps\header.bmp"
-!define MUI_ICON "C:\Installer\Resources\Bitmaps\allegb.ico"
-!define MUI_UNICON "C:\Installer\Resources\Bitmaps\allegb.ico"
+!define MUI_HEADERIMAGE_BITMAP ".\Resources\Bitmaps\header.bmp"
+!define MUI_ICON ".\Resources\Bitmaps\allegb.ico"
+!define MUI_UNICON ".\Resources\Bitmaps\allegb.ico"
 !define MUI_FINISHPAGE_SHOWREADME "$INSTDIR\readme.rtf"
 
 ; Welcome page
 !insertmacro MUI_PAGE_WELCOME
 ; License page
 !define MUI_LICENSEPAGE_CHECKBOX
-!insertmacro MUI_PAGE_LICENSE "C:\Program Files\Microsoft Games\Allegiance\EULA.RTF"
+!insertmacro MUI_PAGE_LICENSE ".\Resources\Allegiance\EULA.RTF"
 ; Components page
 !insertmacro MUI_PAGE_COMPONENTS
 ; Directory page
@@ -61,7 +61,7 @@ Section "Allegiance Game" SEC01
   SetDetailsPrint textonly
   SetOutPath "$INSTDIR"
   SetOverwrite on
-  File /r "C:\Program Files\Microsoft Games\Allegiance\*.*"
+  File /r ".\Resources\Allegiance\*.*"
   SetDetailsPrint listonly
   DetailPrint "- Files Extracted!"
 SectionEnd
@@ -74,7 +74,7 @@ Section "Install English C++ Runtime" SEC03
   SetDetailsPrint none
   SetOutPath "$INSTDIR"
   SetOverwrite on
-  File "C:\Installer\Resources\Redist-x86\vcredist_x86.exe"
+  File ".\Resources\Redist-x86\vcredist_x86.exe"
   ExecWait 'vcredist_x86.exe /q:a /c:"VCREDI~3.EXE /q:a /c:""msiexec /i vcredist.msi /qn"" "'
   Delete "$INSTDIR\vcredist_x86.exe"
   SetDetailsPrint listonly
