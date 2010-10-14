@@ -1,1 +1,1 @@
-http://nsis.sourceforge.net/LogEx_plug-in
+http://nsis.sourceforge.net/AccessControl_plug-in

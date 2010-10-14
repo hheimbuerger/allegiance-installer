@@ -1,3 +1,3 @@
-Todo list (10/13/10):
+Todo list (10/14/10):
 
 - Remove unused files from artwork (reduces size)
