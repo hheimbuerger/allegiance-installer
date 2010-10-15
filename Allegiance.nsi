@@ -230,9 +230,11 @@ SectionEnd
 ; Check of Windows version
 Function WindowsVersionCheck
   ; At least XP
-  ${If} ${AtLeastWinXP}
-    ; and at least Service Pack 2
-    ${AndIf} ${AtLeastServicePack} 2
+  ${If} ${IsWinXP}
+  ; and at least Service Pack 2
+  ${AndIf} ${AtLeastServicePack} 2
+  ; Or Vista or later
+  ${OrIf} ${AtLeastWinVista}
       goto ValidOS
   ${EndIf}
 

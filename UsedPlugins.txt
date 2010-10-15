@@ -1,1 +1,2 @@
 http://nsis.sourceforge.net/AccessControl_plug-in
+http://nsis.sourceforge.net/NSIS_Simple_Firewall_Plugin
