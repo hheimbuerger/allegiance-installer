@@ -21,6 +21,9 @@ RequestExecutionLevel admin
 ; WinVer
 !include "WinVer.nsh"
 
+; Registry search plugin
+!include "registry.nsh"
+
 ; x64 detector
 !include "x64.nsh"
 
@@ -233,8 +236,8 @@ Function WindowsVersionCheck
   ${If} ${IsWinXP}
   ; and at least Service Pack 2
   ${AndIf} ${AtLeastServicePack} 2
-  ; Or Vista or later
-  ${OrIf} ${AtLeastWinVista}
+  ; Or 2003/Vista/Win7
+  ${OrIf} ${AtLeastWin2003}
       goto ValidOS
   ${EndIf}
 
@@ -251,7 +254,7 @@ FunctionEnd
 Function DotNetVersionCheck
   IfFileExists "$WINDIR\Microsoft.NET\Framework\v2.0.50727\MSBuild.exe" DotNetInstalled
   ; Fire up error, .net framework 2.0 is not installed
-  MessageBox MB_OK|MB_ICONSTOP "$(^Name) requires the Microsoft .NET framework version 2.0.$\r$\rNote:$\r.net Framework 3.x or 4.x are no upgrades of 2.0, they are just different runtime environments."
+  MessageBox MB_OK|MB_ICONSTOP "$(^Name) requires the Microsoft .NET framework version 2.0.$\n$\nDownload and install it in your operation system language version!$\n$\nNote:$\n.net Framework 3.x or 4.x are no upgrades of 2.0, they are just different runtime environments.$\nPress OK to open download page."
    
   ; Choose between 32 and 64 bit download
   ${If} ${RunningX64}
@@ -273,10 +276,12 @@ Function DirectX9Check
   ; http://www.toymaker.info/Games/html/d3dx_dlls.html
   IfFileExists "$SYSDIR\D3DX9_42.dll" DirectXInstalled
   ; Fire up error, outdated DirectX 9.0c is installed
-  MessageBox MB_OK|MB_ICONSTOP "You need to upgrade your DirectX.$\r$\rPress OK to contine."
-  ; Run Webinstaller
+  MessageBox MB_OK|MB_ICONSTOP "You need to upgrade your DirectX.$\n$\nPress OK to start installer."
+  ; Run Webinstaller from temp folder
+  SetOutPath "$TEMP"
   File ".\Resources\DirectX\dxwebsetup.exe"
-  ExecWait "dxwebsetup.exe"
+  ExecWait "$TEMP\dxwebsetup.exe"
+  Delete "$TEMP\dxwebsetup.exe"
   
   DirectXInstalled:
   ; Contine installation
@@ -284,24 +289,32 @@ Function DirectX9Check
  
 ; Check if VC9 is installed
 Function VC90Check
-  Push $R0
-  ; http://social.msdn.microsoft.com/Forums/en-US/vssetup/thread/29a56f19-d21d-4cfd-a77b-4667dac8aca0
-  ; http://blogs.msdn.com/b/astebner/archive/2009/01/29/9384143.aspx
-  ReadRegStr $R0 HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\{FF66E9F6-83E7-3A3E-AF14-8DE9A809A6A4}" "DisplayName" ;VC90
-  IfErrors 0 VC90Installed
-  ReadRegStr $R0 HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\{9A25302D-30C0-39D9-BD6F-21E6EC160475}" "DisplayName" ;VC90SP1
-  IfErrors 0 VC90Installed
-  ReadRegStr $R0 HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\{1F1C2DFC-2D24-3E06-BCB8-725134ADF989}" "DisplayName" ;VC90SP1 ATL fix
-  IfErrors 0 VC90Installed
+  ; possible search strings: "Microsoft Visual C++ 2008 ATL Update kb973924", "Microsoft Visual C++ 2008 SP1 Redistributable", "Microsoft Visual C++ 2008 Redistributable"
+  ${registry::Open} "HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\Uninstall" "/K=0 /V=0 /S=1 /B=1 /NI='Microsoft Visual C++ 2008' /T=REG_SZ" $0
+  StrCmp $0 0 0 jm_search ; If we can open registry, jump
+  
+  ; Error, if we con't open Registry
+  MessageBox MB_OK "Could not read registry"
+  ; Closing registry
+  ${registry::Close} "$0"
+  ${registry::Unload}
+  ; exit setup
+  Abort
+
+  jm_search:
+  ${registry::Find} "$0" $1 $2 $3 $4
+  StrCmp $4 "REG_SZ" VC90Installed ; We found the string
   
   ; Fire up error, Visual C++ Redist is not installed
-  MessageBox MB_OK|MB_ICONSTOP "You need to install Visual C++ 2008 runtimes.$\r$\rDownload and install it in your operation system language version.$\r$\rPress OK to contine."
+  MessageBox MB_OK|MB_ICONSTOP "You need to install Visual C++ 2008 runtimes.$\n$\nDownload and install it in your operation system language version!$\n$\nPress OK to open download page."
   ; Run Webinstaller
-  ExecShell Open "http://www.microsoft.com/downloads/en/details.aspx?FamilyID=a5c84275-3b97-4ab7-a40d-3802b2af5fc2"
+  ExecShell Open "http://www.microsoft.com/downloads/en/details.aspx?FamilyID=2051a0c1-c9b5-4b0a-a8f5-770a549fd78c"
   ; Exit setup
   Abort
   
   VC90Installed:
+  ; Closing registry
+  ${registry::Close} "$0"
+  ${registry::Unload}
   ; Contine installation
-  Exch $R0
  FunctionEnd
