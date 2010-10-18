@@ -75,7 +75,7 @@ Section "Allegiance Game" SEC01
   SetDetailsPrint textonly
   SetOutPath "$INSTDIR"
   SetOverwrite on
-  File /r ".\Resources\Allegiance\*.*"
+  File /r /x .svn ".\Resources\Allegiance\*.*" ;/x .svn excludes SVN folders
   SetDetailsPrint listonly
   DetailPrint "- Files Extracted!"
 SectionEnd
@@ -208,7 +208,7 @@ FunctionEnd
 Function .onInit
   Call WindowsVersionCheck
   Call DirectX9Check
-  Call VC90Check
+  ;Call VC90Check
   Call DotNetVersionCheck
 FunctionEnd
 
@@ -257,12 +257,12 @@ Function DotNetVersionCheck
   MessageBox MB_OK|MB_ICONSTOP "$(^Name) requires the Microsoft .NET framework version 2.0.$\n$\nDownload and install it in your operation system language version!$\n$\nNote:$\n.net Framework 3.x or 4.x are no upgrades of 2.0, they are just different runtime environments.$\nPress OK to open download page."
    
   ; Choose between 32 and 64 bit download
-  ${If} ${RunningX64}
+/*${If} ${RunningX64}
     ; Only for Windows XP x64, because Vista and Win7 should have 2.0 already installed 
     ExecShell Open "http://download.microsoft.com/download/c/6/e/c6e88215-0178-4c6c-b5f3-158ff77b1f38/NetFx20SP2_x64.exe"
-  ${Else}
-    ExecShell Open "http://download.microsoft.com/download/c/6/e/c6e88215-0178-4c6c-b5f3-158ff77b1f38/NetFx20SP2_x86.exe "
-  ${EndIf}
+  ${Else}*/
+    ExecShell Open "http://download.microsoft.com/download/c/6/e/c6e88215-0178-4c6c-b5f3-158ff77b1f38/NetFx20SP2_x86.exe"
+ ;${EndIf}
   ; Exit setup
   Abort
 
@@ -270,13 +270,12 @@ Function DotNetVersionCheck
   ; We got .net installed, so we contine setup
 FunctionEnd
 
-; Check if DirectX 9.0c June 2009 or later is installed
+; Check if DirectX 9.0c SDK (March 2009) or later is installed
 Function DirectX9Check
-  ; Check for D3DX9_42.dll (June 2009)
   ; http://www.toymaker.info/Games/html/d3dx_dlls.html
-  IfFileExists "$SYSDIR\D3DX9_42.dll" DirectXInstalled
+  IfFileExists "$SYSDIR\D3DX9_41.dll" DirectXInstalled
   ; Fire up error, outdated DirectX 9.0c is installed
-  MessageBox MB_OK|MB_ICONSTOP "You need to upgrade your DirectX.$\n$\nPress OK to start installer."
+  MessageBox MB_OK|MB_ICONSTOP "Can't find DirectX 9.0c SDK (March 2009).$\n$\nPress OK to start installer."
   ; Run Webinstaller from temp folder
   SetOutPath "$TEMP"
   File ".\Resources\DirectX\dxwebsetup.exe"
@@ -286,7 +285,15 @@ Function DirectX9Check
   DirectXInstalled:
   ; Contine installation
  FunctionEnd
- 
+
+ /*
+; Options:
+; 1. Use the current solution (check registry for installed redistributable)
+; 2. Use Lexaal's exe to detect redistributable
+; 3. Ignore redistributable and just put msvcr90.dll into Allegiance folder (+ msvcp90.dll for AllSrv),
+;    prime examples for this: Spore, The Guild 2, Civilisation IV, Heroes of Might and Magic V, ...
+;    http://blog.kalmbach-software.de/2008/05/03/howto-deploy-vc2008-apps-without-installing-vcredist_x86exe/
+
 ; Check if VC9 is installed
 Function VC90Check
   ; possible search strings: "Microsoft Visual C++ 2008 ATL Update kb973924", "Microsoft Visual C++ 2008 SP1 Redistributable", "Microsoft Visual C++ 2008 Redistributable"
@@ -318,3 +325,4 @@ Function VC90Check
   ${registry::Unload}
   ; Contine installation
  FunctionEnd
+ */
