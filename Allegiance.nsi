@@ -4,6 +4,10 @@
 
 SetCompressor lzma
  
+ ; Vars for downloader
+Var /GLOBAL filename
+Var /GLOBAL url
+
 ; Installer has to run as administrator
 RequestExecutionLevel admin
 
@@ -60,7 +64,7 @@ RequestExecutionLevel admin
 ; MUI end ------
 
 SetFont "Tahoma" 8
-BrandingText "Free Allegiance (Installer Build x)"
+BrandingText "FreeAllegiance (Installer Build X)"
 
 Name "${PRODUCT_NAME} ${PRODUCT_VERSION}"
 OutFile "Allegiance Setup.exe"
@@ -68,7 +72,7 @@ InstallDir "$PROGRAMFILES\Microsoft Games\Allegiance"
 ShowInstDetails show
 ShowUnInstDetails show
 
-Section "Allegiance Game" SEC01
+Section "Allegiance Game" SECgame
   SectionIn RO
   SetDetailsPrint both
   DetailPrint "Extracting Files..."
@@ -77,11 +81,11 @@ Section "Allegiance Game" SEC01
   SetOverwrite on
   File /r /x .svn ".\Resources\Allegiance\*.*" ;/x .svn excludes SVN folders
   SetDetailsPrint listonly
-  DetailPrint "- Files Extracted!"
+  DetailPrint "... done"
 SectionEnd
 
 ; Option to unpack OGG files to wave - ogg decoder won't get deleted
-Section /o "Unpack OGG Files" SEC02
+Section /o "Unpack OGG Files" SECunpackOGG
   SetDetailsPrint both
   DetailPrint "Decoding audio files... "
   SetDetailsPrint listonly
@@ -89,6 +93,36 @@ Section /o "Unpack OGG Files" SEC02
   SetDetailsPrint none
   SetOutPath "$INSTDIR\Artwork"
   ExecWait '"$INSTDIR\Artwork\oggdec.exe" "$INSTDIR\Artwork\*.ogg"'
+  SetDetailsPrint listonly
+  DetailPrint "... done"
+SectionEnd
+
+Section /o "HighRes Asteroids" SECdHRasteroids
+  StrCpy $filename "HR_asteroids.7z"
+  SetDetailsPrint both
+  DetailPrint "Downloading asteroid textures..."
+  SetDetailsPrint textonly
+  Call DownloadHR
+  SetDetailsPrint listonly
+  DetailPrint "... done"
+SectionEnd
+
+Section /o "HighRes Backgrounds" SECdHRbackgrounds
+  StrCpy $filename "HR_backgrounds.7z"
+  SetDetailsPrint both
+  DetailPrint "Downloading asteroid textures..."
+  SetDetailsPrint textonly
+  Call DownloadHR
+  SetDetailsPrint listonly
+  DetailPrint "... done"
+SectionEnd
+
+Section /o "HighRes Effects" SECdHReffects
+  StrCpy $filename "HR_effects.7z"
+  SetDetailsPrint both
+  DetailPrint "Downloading asteroid textures..."
+  SetDetailsPrint textonly
+  Call DownloadHR
   SetDetailsPrint listonly
   DetailPrint "... done"
 SectionEnd
@@ -103,9 +137,9 @@ Section -AdditionalIcons
   ;CreateShortCut "$DESKTOP\Allegiance Learning Guide.lnk" "http://www.freeallegiance.org/FAW/index.php/Learning_guide" "" "$INSTDIR\academy.ico"
   CreateDirectory "$SMPROGRAMS\Allegiance"
   CreateShortCut "$SMPROGRAMS\Allegiance\Allegiance.lnk" "$INSTDIR\ASGSClient.exe"
-  CreateShortCut "$SMPROGRAMS\Allegiance\Allegiance - Learning Guide.lnk" "http://www.freeallegiance.org/FAW/index.php/Learning_guide" "" "$INSTDIR\academy.ico"
-  CreateShortCut "$SMPROGRAMS\Allegiance\Allegiance - Tech Support.lnk" "http://www.freeallegiance.org/FAW/index.php/Tech_Support" "" "$INSTDIR\allegg.ico"
-  SetDetailsPrint listonly
+  CreateShortCut "$SMPROGRAMS\Allegiance\FreeAllegiance - Learning Guide.lnk" "http://www.freeallegiance.org/FAW/index.php/Learning_guide" "" "$INSTDIR\academy.ico"
+  CreateShortCut "$SMPROGRAMS\Allegiance\FreeAllegiance - Tech Support.lnk" "http://www.freeallegiance.org/FAW/index.php/Tech_Support" "" "$INSTDIR\allegg.ico"
+  CreateShortCut "$SMPROGRAMS\Allegiance\FreeAllegiance - Community.lnk" "http://www.freeallegiance.org/forums/index.php?act=home" "" "$INSTDIR\allegg.ico"
   DetailPrint "... done"
 SectionEnd
 
@@ -188,8 +222,11 @@ SectionEnd
 ; Section descriptions
 !insertmacro MUI_FUNCTION_DESCRIPTION_BEGIN
   ; THIS CAKE IS A LIE!
-  !insertmacro MUI_DESCRIPTION_TEXT ${SEC01} "Basic game components."
-  !insertmacro MUI_DESCRIPTION_TEXT ${SEC02} "Transcodes the game audio from OGG to WAV.$\r$\rThis option is only recommended for slow computers and will increase install time."
+  !insertmacro MUI_DESCRIPTION_TEXT ${SECgame} "Basic game components."
+  !insertmacro MUI_DESCRIPTION_TEXT ${SECunpackOGG} "Transcodes the game audio from OGG to WAV.$\n$\nThis option is only recommended for slow computers and will increase install time."
+  !insertmacro MUI_DESCRIPTION_TEXT ${SECdHRasteroids} "This option will download additional high resolution asteroid textures.$\n$\n(about 30 MiB)"
+  !insertmacro MUI_DESCRIPTION_TEXT ${SECdHRbackgrounds} "This option will download additional high resolution background textures, like planets and nebulas.$\n$\n(about 64 MiB)"
+  !insertmacro MUI_DESCRIPTION_TEXT ${SECdHReffects} "This option will download additional high resolution effect textures, like explosions and alephs.$\n$\n(about 5 MiB)"
 !insertmacro MUI_FUNCTION_DESCRIPTION_END
 
 ; Uninstaller - success message
@@ -200,12 +237,15 @@ FunctionEnd
 
 ; Uninstaller - initial message
 Function un.onInit
-  MessageBox MB_ICONQUESTION|MB_YESNO|MB_DEFBUTTON2 "NOTICE: This uninstaller will remove ALL files and directories in the $(^Name) directory, including ones not placed there by the installer.  If you wish to save any of those files, click NO and back them up before proceeding.$\r$\rAre you sure you want to completely remove $(^Name) and all of its components?" IDYES +2
+  MessageBox MB_ICONQUESTION|MB_YESNO|MB_DEFBUTTON2 "NOTICE: This uninstaller will remove ALL files and directories in the $(^Name) directory, including ones not placed there by the installer.  If you wish to save any of those files, click NO and back them up before proceeding.$\n$\nAre you sure you want to completely remove $(^Name) and all of its components?" IDYES +2
   Abort
 FunctionEnd
 
 ; Initailisation of installer
 Function .onInit
+  ; Download page for HighRes files
+  StrCpy $url "http://www.german-borg.de/files/installer"
+
   Call WindowsVersionCheck
   Call DirectX9Check
   ;Call VC90Check
@@ -230,6 +270,30 @@ Section Uninstall
   SetAutoClose true
 SectionEnd
 
+Function DownloadHR
+  ; downloading file
+  DetailPrint "Beginning download of HighRes Asteroids..."
+  inetc::get "$url/$filename" "$TEMP\$filename" "/end"
+  DetailPrint "... done"
+  Pop $0
+  ${If} $0 == "Cancelled"
+    DetailPrint "Download cancelled!"
+	Goto dlfailed
+  ${ElseIf} $0 != "OK"
+    DetailPrint "Download failed!"
+	Goto dlfailed
+  ${EndIf}
+  
+  ; extract file
+  DetailPrint "Extracting download..."
+  SetOutPath "$INSTDIR\artwork\Textures\"
+  SetOverwrite on
+  ;File "$TEMP\$filename"
+  Nsis7z::ExtractWithDetails "$TEMP\$filename" "Installing package %s..."
+  Delete "$TEMP\$filename"
+
+  dlfailed:  
+ FunctionEnd
 ; Check of Windows version
 Function WindowsVersionCheck
   ; At least XP
@@ -254,28 +318,30 @@ FunctionEnd
 Function DotNetVersionCheck
   IfFileExists "$WINDIR\Microsoft.NET\Framework\v2.0.50727\MSBuild.exe" DotNetInstalled
   ; Fire up error, .net framework 2.0 is not installed
-  MessageBox MB_OK|MB_ICONSTOP "$(^Name) requires the Microsoft .NET framework version 2.0.$\n$\nDownload and install it in your operation system language version!$\n$\nNote:$\n.net Framework 3.x or 4.x are no upgrades of 2.0, they are just different runtime environments.$\nPress OK to open download page."
-   
-  ; Choose between 32 and 64 bit download
-/*${If} ${RunningX64}
-    ; Only for Windows XP x64, because Vista and Win7 should have 2.0 already installed 
-    ExecShell Open "http://download.microsoft.com/download/c/6/e/c6e88215-0178-4c6c-b5f3-158ff77b1f38/NetFx20SP2_x64.exe"
-  ${Else}*/
-    ExecShell Open "http://download.microsoft.com/download/c/6/e/c6e88215-0178-4c6c-b5f3-158ff77b1f38/NetFx20SP2_x86.exe"
- ;${EndIf}
-  ; Exit setup
+  MessageBox MB_OK|MB_ICONSTOP "$(^Name) requires the Microsoft .NET framework 2.0.$\n$\nNote:$\n.net Framework 3.x or 4.x are no upgrades of 2.0, they are just different runtime environments."
+  MessageBox MB_YESNO "You want to start download of .NET framework 2.0 SP2 (x86) from Microsoft Download Center?$\n$\nDownload page:$\nhttp://www.microsoft.com/downloads/en/details.aspx?FamilyID=5b2c0358-915b-4eb5-9b1d-10e506da9d0f" IDYES 0 IDNO DoNotDownload
+  ; Downlaod installer to temp
+  inetc::get "http://download.microsoft.com/download/c/6/e/c6e88215-0178-4c6c-b5f3-158ff77b1f38/NetFx20SP2_x86.exe" "$TEMP\NetFx20SP2_x86.exe" "/end"
+  ; Run installer
+  ExecWait "$TEMP\NetFx20SP2_x86.exe"
+  ; Delete installer
+  Delete "$TEMP\NetFx20SP2_x86.exe"
+  Goto DotNetInstalled
+  
+  DoNotDownload:
+  MessageBox MB_OK|MB_ICONEXCLAMATION "ASGS will not run without .net Framework 2.0.\n\nRestart installer or you have to download it yourself from Mircosoft Download Center or via Windows Update."
   Abort
 
   DotNetInstalled:
   ; We got .net installed, so we contine setup
 FunctionEnd
 
-; Check if DirectX 9.0c SDK (March 2009) or later is installed
+; Check if DirectX 9.0c (March 2009) or later is installed
 Function DirectX9Check
   ; http://www.toymaker.info/Games/html/d3dx_dlls.html
   IfFileExists "$SYSDIR\D3DX9_41.dll" DirectXInstalled
   ; Fire up error, outdated DirectX 9.0c is installed
-  MessageBox MB_OK|MB_ICONSTOP "Can't find DirectX 9.0c SDK (March 2009).$\n$\nPress OK to start installer."
+  MessageBox MB_OK|MB_ICONSTOP "Can't find DirectX 9.0c (March 2009).$\n$\nPress OK to start installer."
   ; Run Webinstaller from temp folder
   SetOutPath "$TEMP"
   File ".\Resources\DirectX\dxwebsetup.exe"
