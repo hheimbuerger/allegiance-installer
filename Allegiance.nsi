@@ -80,6 +80,11 @@ Section "Allegiance Game" SECgame
   SetOutPath "$INSTDIR"
   SetOverwrite on
   File /r /x .svn ".\Resources\Allegiance\*.*" ;/x .svn excludes SVN folders
+  
+  ; This will fix the issue, that ASGS will overwrite R5 Allegiance.exe
+  SetOutPath "$INSTDIR\Beta"
+  File /r /x .svn ".\Resources\Allegiance\Allegiance.exe" ;/x .svn excludes SVN folders
+  
   SetDetailsPrint listonly
   DetailPrint "... done"
 SectionEnd
@@ -175,7 +180,7 @@ Section -Post
   ; BETA ArtPath - Defines Artwork path
   WriteRegStr HKLM "Software\Microsoft\Microsoft Games\Allegiance\1.1" "ArtPath" "$INSTDIR\Artwork"
   ; BETA EXE Path - This is why ASGS overwrites Allegiance.exe in beta mode
-  WriteRegStr HKLM "Software\Microsoft\Microsoft Games\Allegiance\1.1" "EXE Path" "$INSTDIR"
+  WriteRegStr HKLM "Software\Microsoft\Microsoft Games\Allegiance\1.1" "EXE Path" "$INSTDIR\Beta" ; This will fix the issue, that ASGS will overwrite R5 Allegiance.exe
   ; BETA CfgFile
   WriteRegStr HKLM "Software\Microsoft\Microsoft Games\Allegiance\1.1" "CfgFile" "http://fazdev.alleg.net/FAZ/FAZbeta.cfg"
   ; BETA CDKey
