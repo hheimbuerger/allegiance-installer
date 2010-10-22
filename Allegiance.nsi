@@ -341,12 +341,12 @@ Function DotNetVersionCheck
   ; We got .net installed, so we contine setup
 FunctionEnd
 
-; Check if DirectX 9.0c (March 2009) or later is installed
+; Check if DirectX 9.0c (at least Feb 2010) is installed
 Function DirectX9Check
   ; http://www.toymaker.info/Games/html/d3dx_dlls.html
-  IfFileExists "$SYSDIR\D3DX9_41.dll" DirectXInstalled
+  IfFileExists "$SYSDIR\d3dx9_43.dll" DirectXInstalled
   ; Fire up error, outdated DirectX 9.0c is installed
-  MessageBox MB_OK|MB_ICONSTOP "Can't find DirectX 9.0c (March 2009).$\n$\nPress OK to start installer."
+  MessageBox MB_OK|MB_ICONSTOP "Can't find DirectX 9.0c (Feb 2010).$\n$\nPress OK to start installer."
   ; Run Webinstaller from temp folder
   SetOutPath "$TEMP"
   File ".\Resources\DirectX\dxwebsetup.exe"
