@@ -201,11 +201,14 @@ Section -Post
   DetailPrint "Updating access control list..."
   SetDetailsPrint textonly
   ; Allow users to write into Allegiance directory
+  AccessControl::EnableFileInheritance "$INSTDIR"
   AccessControl::GrantOnFile "$INSTDIR" "(BU)" "GenericRead + GenericWrite"
   ; Allow users to write registry settings
   ${If} ${RunningX64}
+    AccessControl::EnableRegKeyInheritance  HKLM "Software\\Wow6432Node\\Microsoft\\Microsoft Games\\Allegiance"
     AccessControl::GrantOnRegKey HKLM "Software\\Wow6432Node\\Microsoft\\Microsoft Games\\Allegiance" "(BU)" "FullAccess"
   ${Else}
+    AccessControl::EnableRegKeyInheritance  HKLM "Software\\Microsoft\\Microsoft Games\\Allegiance"
     AccessControl::GrantOnRegKey HKLM "Software\\Microsoft\\Microsoft Games\\Allegiance" "(BU)" "FullAccess"
   ${EndIf}
   SetDetailsPrint both
