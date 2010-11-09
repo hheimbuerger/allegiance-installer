@@ -39,7 +39,7 @@ RequestExecutionLevel admin
 !define MUI_HEADERIMAGE_BITMAP ".\Resources\Bitmaps\header.bmp"
 !define MUI_ICON ".\Resources\Bitmaps\allegb.ico"
 !define MUI_UNICON ".\Resources\Bitmaps\allegb.ico"
-!define MUI_FINISHPAGE_SHOWREADME "$INSTDIR\readme.rtf"
+!define MUI_FINISHPAGE_SHOWREADME "http://www.freeallegiance.org/FAW/index.php/Readme"
 
 ; Welcome page
 !insertmacro MUI_PAGE_WELCOME
@@ -140,12 +140,17 @@ Section -AdditionalIcons
   SetOutPath "$INSTDIR"
   ;CreateShortCut "$DESKTOP\Allegiance.lnk" "$INSTDIR\ASGSClient.exe"
   ;CreateShortCut "$DESKTOP\Allegiance Learning Guide.lnk" "http://www.freeallegiance.org/FAW/index.php/Learning_guide" "" "$INSTDIR\academy.ico"
+  
+  ; Make Icons for all users.
+  SetShellVarContext all
+  
   CreateDirectory "$SMPROGRAMS\Allegiance"
   CreateShortCut "$SMPROGRAMS\Allegiance\Allegiance.lnk" "$INSTDIR\ASGSClient.exe"
+  CreateShortCut "$SMPROGRAMS\Allegiance\ReadMe.lnk"  "http://www.freeallegiance.org/FAW/index.php/Readme" "" "$INSTDIR\allegr.ico"
   CreateShortCut "$SMPROGRAMS\Allegiance\FreeAllegiance - Learning Guide.lnk" "http://www.freeallegiance.org/FAW/index.php/Learning_guide" "" "$INSTDIR\academy.ico"
   CreateShortCut "$SMPROGRAMS\Allegiance\FreeAllegiance - Tech Support.lnk" "http://www.freeallegiance.org/FAW/index.php/Tech_Support" "" "$INSTDIR\allegg.ico"
-  CreateShortCut "$SMPROGRAMS\Allegiance\FreeAllegiance - Community.lnk" "http://www.freeallegiance.org/forums/index.php?act=home" "" "$INSTDIR\allegg.ico"
-  DetailPrint "... done"
+  CreateShortCut "$SMPROGRAMS\Allegiance\FreeAllegiance - Community home.lnk" "http://www.freeallegiance.org/forums/index.php?act=home" "" "$INSTDIR\allegg.ico"
+ DetailPrint "... done"
 SectionEnd
 
 Section -Post
