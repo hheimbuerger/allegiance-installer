@@ -230,6 +230,15 @@ Section -Post
   ${EndIf}
     
   DetailPrint "-- Installation Complete --"
+  
+  ; Check if IE is in offline mode
+  ; http://support.microsoft.com/kb/180946
+  ReadRegDWORD $R0 HKCU "Software\Microsoft\Windows\CurrentVersion\Internet Settings" "GlobalUserOffline"
+  ; If Offline Mode is active, fire up warning.
+  ${If} $R0 == "1"
+   MessageBox MB_OK|MB_ICONSTOP "Internet Explorer is running in Offline Mode.$\n$\nYou need to disable Offline Mode of Internet Explorer, to play Allegiance.$\n$\nOpen Internet Explorer, Open FILE menu and uncheck WORK OFFLINE.$\n$\nPress OK to contine setup."
+  ${EndIf}
+  
 SectionEnd
 
 ; Section descriptions
