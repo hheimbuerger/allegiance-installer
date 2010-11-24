@@ -4,9 +4,9 @@
 
 SetCompressor lzma
  
- ; Vars for downloader
-Var /GLOBAL filename
-Var /GLOBAL url
+; Vars for downloader
+;Var /GLOBAL filename
+;Var /GLOBAL url
 
 ; Installer has to run as administrator
 RequestExecutionLevel admin
@@ -24,9 +24,6 @@ RequestExecutionLevel admin
 
 ; WinVer
 !include "WinVer.nsh"
-
-; Registry search plugin
-!include "registry.nsh"
 
 ; x64 detector
 !include "x64.nsh"
@@ -64,7 +61,7 @@ RequestExecutionLevel admin
 ; MUI end ------
 
 SetFont "Tahoma" 8
-BrandingText "FreeAllegiance (Installer Build X)"
+BrandingText "Free Allegiance (Build of ${__DATE__} ${__TIME__})"
 
 Name "${PRODUCT_NAME} ${PRODUCT_VERSION}"
 OutFile "Allegiance Setup.exe"
@@ -79,11 +76,15 @@ Section "Allegiance Game" SECgame
   SetDetailsPrint textonly
   SetOutPath "$INSTDIR"
   SetOverwrite on
+  
+  ; Copy Allegiance
   File /r /x .svn ".\Resources\Allegiance\*.*" ;/x .svn excludes SVN folders
   
-  ; This will fix the issue, that ASGS will overwrite R5 Allegiance.exe
-  SetOutPath "$INSTDIR\Beta"
-  File /r /x .svn ".\Resources\Allegiance\Allegiance.exe" ;/x .svn excludes SVN folders
+  ; VC DLLs for retail
+  File /r /x .svn ".\Resources\VC90\*.*" ;/x .svn excludes SVN folders
+  
+  ; VC DLLs for  beta
+  File /r /x .svn ".\Resources\VC90\*.*" ;/x .svn excludes SVN folders
   
   SetDetailsPrint listonly
   DetailPrint "... done"
@@ -101,6 +102,9 @@ Section /o "Unpack OGG Files" SECunpackOGG
   SetDetailsPrint listonly
   DetailPrint "... done"
 SectionEnd
+
+/*
+Example for download content
 
 Section /o "HighRes Asteroids" SECdHRasteroids
   StrCpy $filename "HR_asteroids.7z"
@@ -131,6 +135,7 @@ Section /o "HighRes Effects" SECdHReffects
   SetDetailsPrint listonly
   DetailPrint "... done"
 SectionEnd
+*/
 
 ; Shortcuts for Startmenu/Desktop - This needs an option, because desktop icons are annoying
 Section -AdditionalIcons
@@ -138,19 +143,24 @@ Section -AdditionalIcons
   DetailPrint "Creating start menu entries..."
   SetDetailsPrint none
   SetOutPath "$INSTDIR"
-  ;CreateShortCut "$DESKTOP\Allegiance.lnk" "$INSTDIR\ASGSClient.exe"
-  ;CreateShortCut "$DESKTOP\Allegiance Learning Guide.lnk" "http://www.freeallegiance.org/FAW/index.php/Learning_guide" "" "$INSTDIR\academy.ico"
-  
+
   ; Make Icons for all users.
   SetShellVarContext all
-  
+
+  ; IMPORTANT - You need to delete desktop shortcuts separately in the uninstaller!
+  CreateShortCut "$DESKTOP\Allegiance.lnk" "$INSTDIR\ASGSClient.exe" "" "$INSTDIR\ASGSClient.exe" 0
+  ;CreateShortCut "$DESKTOP\Allegiance Learning Guide.lnk" "http://www.freeallegiance.org/FAW/index.php/Learning_guide" "" "$INSTDIR\academy.ico"
+ 
   CreateDirectory "$SMPROGRAMS\Allegiance"
-  CreateShortCut "$SMPROGRAMS\Allegiance\Allegiance.lnk" "$INSTDIR\ASGSClient.exe"
+  CreateShortCut "$SMPROGRAMS\Allegiance\Allegiance.lnk" "$INSTDIR\ASGSClient.exe" "" "$INSTDIR\ASGSClient.exe" 0
   CreateShortCut "$SMPROGRAMS\Allegiance\ReadMe.lnk"  "http://www.freeallegiance.org/FAW/index.php/Readme" "" "$INSTDIR\allegr.ico"
-  CreateShortCut "$SMPROGRAMS\Allegiance\FreeAllegiance - Learning Guide.lnk" "http://www.freeallegiance.org/FAW/index.php/Learning_guide" "" "$INSTDIR\academy.ico"
-  CreateShortCut "$SMPROGRAMS\Allegiance\FreeAllegiance - Tech Support.lnk" "http://www.freeallegiance.org/FAW/index.php/Tech_Support" "" "$INSTDIR\allegg.ico"
-  CreateShortCut "$SMPROGRAMS\Allegiance\FreeAllegiance - Community home.lnk" "http://www.freeallegiance.org/forums/index.php?act=home" "" "$INSTDIR\allegg.ico"
- DetailPrint "... done"
+  CreateShortCut "$SMPROGRAMS\Allegiance\Create Account.lnk" "http://asgs.alleg.net/asgsnet/newaccount.aspx" "" "$INSTDIR\allegr.ico"
+  CreateShortCut "$SMPROGRAMS\Allegiance\Free Allegiance - Learning Guide.lnk" "http://www.freeallegiance.org/FAW/index.php/Learning_guide" "" "$INSTDIR\academy.ico"
+  CreateShortCut "$SMPROGRAMS\Allegiance\Free Allegiance - Tech Support.lnk" "http://www.freeallegiance.org/FAW/index.php/Tech_Support" "" "$INSTDIR\allegg.ico"
+  CreateShortCut "$SMPROGRAMS\Allegiance\Free Allegiance - Community home.lnk" "http://www.freeallegiance.org/forums/index.php?act=home" "" "$INSTDIR\allegg.ico"
+ 
+  SetDetailsPrint both 
+  DetailPrint "... done"
 SectionEnd
 
 Section -Post
@@ -170,6 +180,14 @@ Section -Post
   
   DetailPrint "Creating registry keys..."
   SetDetailsPrint textonly
+  
+  ; ASGS
+  ; Having a key for ASGS will not bring up OOBE error
+  ; It makes no sense to write more registry keys, because ASGS will always complain about wrong Password hash.
+  ; (Unable to Read Registry Values - Bad Data)
+  WriteRegStr HKLM "Software\Microsoft\Microsoft Games\Allegiance\1.0\ASGS\2.0" "AbnormalExit" "FALSE"
+  WriteRegStr HKLM "Software\Microsoft\Microsoft Games\Allegiance\1.0\ASGS\2.0" "FirstRun" "False"
+  
   ; Artpath
   WriteRegStr HKLM "Software\Microsoft\Microsoft Games\Allegiance\1.0" "ArtPath" "$INSTDIR\Artwork"
   ; EXE Path - Install directory of Allegiance.exe
@@ -182,6 +200,7 @@ Section -Post
   WriteRegDWORD HKLM "Software\Microsoft\Microsoft Games\Allegiance\1.0" "FIRSTRUN" "1"
   ; HasTrained - Disables Training mission popup
   WriteRegDWORD HKLM "Software\Microsoft\Microsoft Games\Allegiance\1.0" "HasTrained" "1"
+  
   ; BETA ArtPath - Defines Artwork path
   WriteRegStr HKLM "Software\Microsoft\Microsoft Games\Allegiance\1.1" "ArtPath" "$INSTDIR\Artwork"
   ; BETA EXE Path - This is why ASGS overwrites Allegiance.exe in beta mode
@@ -194,6 +213,7 @@ Section -Post
   WriteRegDWORD HKLM "Software\Microsoft\Microsoft Games\Allegiance\1.1" "FIRSTRUN" "1"
   ; BETA HasTrained
   WriteRegDWORD HKLM "Software\Microsoft\Microsoft Games\Allegiance\1.1" "HasTrained" "1"
+  
   SetDetailsPrint both
   DetailPrint "... done"
   
@@ -222,9 +242,9 @@ Section -Post
     ; This runs only, if Windows Firewall is active
     DetailPrint "Adding exceptions to Windows Firewall..."
     SetDetailsPrint textonly
-    SimpleFC::AddApplication "FreeAllegiance - Game" "$INSTDIR\Allegiance.exe" 0 2 "" 1
-    SimpleFC::AddApplication "FreeAllegiance - ASGS" "$INSTDIR\ASGSClient.exe" 0 2 "" 1
-    SimpleFC::AddApplication "FreeAllegiance - ASGS Update" "$INSTDIR\ASGSUpdate.exe" 0 2 "" 1
+    SimpleFC::AddApplication "Free Allegiance - Game" "$INSTDIR\Allegiance.exe" 0 2 "" 1
+    SimpleFC::AddApplication "Free Allegiance - ASGS" "$INSTDIR\ASGSClient.exe" 0 2 "" 1
+    SimpleFC::AddApplication "Free Allegiance - ASGS Update" "$INSTDIR\ASGSUpdate.exe" 0 2 "" 1
     SetDetailsPrint both
     DetailPrint "... done"
   ${EndIf}
@@ -236,9 +256,15 @@ Section -Post
   ReadRegDWORD $R0 HKCU "Software\Microsoft\Windows\CurrentVersion\Internet Settings" "GlobalUserOffline"
   ; If Offline Mode is active, fire up warning.
   ${If} $R0 == "1"
-   MessageBox MB_OK|MB_ICONSTOP "Internet Explorer is running in Offline Mode.$\n$\nYou need to disable Offline Mode of Internet Explorer, to play Allegiance.$\n$\nOpen Internet Explorer, Open FILE menu and uncheck WORK OFFLINE.$\n$\nPress OK to contine setup."
+   MessageBox MB_ICONSTOP|MB_OK "Internet Explorer is running in Offline Mode.$\n$\nYou need to disable Offline Mode of Internet Explorer, to play Allegiance.$\n$\nOpen Internet Explorer, Open FILE menu and uncheck WORK OFFLINE.$\n$\nPress OK to contine setup."
   ${EndIf}
   
+  ; Ask if user wants to create new account
+  MessageBox MB_ICONQUESTION|MB_YESNO "Do you want to create a new account, to play online?$\n$\nIf you already have a ASGS account, you can click on NO." IDYES 0 IDNO +2
+   ExecShell "open" "http://asgs.alleg.net/asgsnet/newaccount.aspx"
+   
+  ; oggdec is no longer needed, after installer is finished, so we delete it
+  Delete "$INSTDIR\Artwork\oggdec.exe"
 SectionEnd
 
 ; Section descriptions
@@ -246,9 +272,12 @@ SectionEnd
   ; THIS CAKE IS A LIE!
   !insertmacro MUI_DESCRIPTION_TEXT ${SECgame} "Basic game components."
   !insertmacro MUI_DESCRIPTION_TEXT ${SECunpackOGG} "Transcodes the game audio from OGG to WAV.$\n$\nThis option is only recommended for slow computers and will increase install time."
+/*
+Example of download content
   !insertmacro MUI_DESCRIPTION_TEXT ${SECdHRasteroids} "This option will download additional high resolution asteroid textures.$\n$\n(about 30 MiB)"
   !insertmacro MUI_DESCRIPTION_TEXT ${SECdHRbackgrounds} "This option will download additional high resolution background textures, like planets and nebulas.$\n$\n(about 64 MiB)"
   !insertmacro MUI_DESCRIPTION_TEXT ${SECdHReffects} "This option will download additional high resolution effect textures, like explosions and alephs.$\n$\n(about 5 MiB)"
+*/
 !insertmacro MUI_FUNCTION_DESCRIPTION_END
 
 ; Uninstaller - success message
@@ -266,7 +295,7 @@ FunctionEnd
 ; Initailisation of installer
 Function .onInit
   ; Download page for HighRes files
-  StrCpy $url "http://www.german-borg.de/files/installer"
+  ; StrCpy $url "http://www.german-borg.de/files/installer"
 
   Call WindowsVersionCheck
   Call DirectX9Check
@@ -280,17 +309,38 @@ Section Uninstall
   DetailPrint "Please wait while Allegiance is uninstalled."
   SetDetailsPrint textonly
   SetOutPath "$INSTDIR"
-  Delete "$DESKTOP\Allegiance.lnk"
-  Delete "$DESKTOP\Allegiance Academy.lnk"
-  Delete "$SMPROGRAMS\Allegiance\Allegiance.lnk"
-  Delete "$SMPROGRAMS\Allegiance\Allegiance Academy.lnk"
-
+  
+  ; Remove startmenu
+  SetShellVarContext all
   RMDir /r "$SMPROGRAMS\Allegiance"
+  
+  ; Remove desktop shortcut
+  Delete "$DESKTOP\Allegiance.lnk"
+  ;Delete "$DESKTOP\Allegiance Learning Guide.lnk"
+  
+  ; Remove installation folder
   RMDir /r "$INSTDIR"
-
-  DeleteRegKey ${PRODUCT_UNINST_ROOT_KEY} "${PRODUCT_UNINST_KEY}"
+  
+  ; Remove registry keys
+  DeleteRegKey HKLM "Software\Microsoft\Microsoft Games\Allegiance"
+  
+  ; Remove firewall rules
+  SimpleFC::IsFirewallEnabled ; Is Windows Firewall enabled?
+  Pop $0
+  Pop $1
+  ${If} $1 == 1
+    ; This runs only, if Windows Firewall is active
+    SimpleFC::RemoveApplication "$INSTDIR\Allegiance.exe"
+    SimpleFC::RemoveApplication "$INSTDIR\ASGSClient.exe"
+    SimpleFC::RemoveApplication "$INSTDIR\ASGSUpdate.exe"
+  ${EndIf}
+  
   SetAutoClose true
 SectionEnd
+
+/*
+
+Example for download content
 
 Function DownloadHR
   ; downloading file
@@ -316,6 +366,8 @@ Function DownloadHR
 
   dlfailed:  
  FunctionEnd
+ */
+ 
 ; Check of Windows version
 Function WindowsVersionCheck
   ; At least XP
@@ -329,7 +381,7 @@ Function WindowsVersionCheck
 
   ; Win9x/WinNT/Win2k/WinXPSP1
   ; Fire up error, that OS is outdated and not supported
-  MessageBox MB_OK|MB_ICONSTOP "$(^Name) requires Microsoft Windows XP Service Pack 2 or higher."
+  MessageBox MB_ICONSTOP|MB_OK "$(^Name) requires Microsoft Windows XP Service Pack 2 or higher."
   ; Abort setup
   Abort
 
@@ -339,19 +391,25 @@ FunctionEnd
 ; Check if .net framework 2.0 is installed
 Function DotNetVersionCheck
   IfFileExists "$WINDIR\Microsoft.NET\Framework\v2.0.50727\MSBuild.exe" DotNetInstalled
+  
   ; Fire up error, .net framework 2.0 is not installed
-  MessageBox MB_OK|MB_ICONSTOP "$(^Name) requires the Microsoft .NET framework 2.0.$\n$\nNote:$\n.net Framework 3.x or 4.x are no upgrades of 2.0, they are just different runtime environments."
-  MessageBox MB_YESNO "You want to start download of .NET framework 2.0 SP2 (x86) from Microsoft Download Center?$\n$\nDownload page:$\nhttp://www.microsoft.com/downloads/en/details.aspx?FamilyID=5b2c0358-915b-4eb5-9b1d-10e506da9d0f" IDYES 0 IDNO DoNotDownload
+  MessageBox MB_ICONSTOP|MB_OK "$(^Name) requires the Microsoft .NET framework 2.0.$\n$\nNote:$\n.net Framework 3.x or 4.x are no upgrades of 2.0, they are just different runtime environments."
+
+  MessageBox MB_ICONQUESTION|MB_YESNO "Do you want to start download of .NET framework 2.0 SP2 (x86) from Microsoft Download Center?$\n$\nDownload page:$\nhttp://www.microsoft.com/downloads/en/details.aspx?FamilyID=5b2c0358-915b-4eb5-9b1d-10e506da9d0f" IDYES 0 IDNO DoNotDownload
+  
   ; Downlaod installer to temp
   inetc::get "http://download.microsoft.com/download/c/6/e/c6e88215-0178-4c6c-b5f3-158ff77b1f38/NetFx20SP2_x86.exe" "$TEMP\NetFx20SP2_x86.exe" "/end"
+  
   ; Run installer
   ExecWait "$TEMP\NetFx20SP2_x86.exe"
+  
   ; Delete installer
   Delete "$TEMP\NetFx20SP2_x86.exe"
+  
   Goto DotNetInstalled
   
   DoNotDownload:
-  MessageBox MB_OK|MB_ICONEXCLAMATION "ASGS will not run without .net Framework 2.0.\n\nRestart installer or you have to download it yourself from Mircosoft Download Center or via Windows Update."
+  MessageBox MB_ICONEXCLAMATION|MB_OK "ASGS will not run without .net Framework 2.0.\n\nRestart installer or you have to download it yourself from Mircosoft Download Center or via Windows Update."
   Abort
 
   DotNetInstalled:
@@ -362,8 +420,7 @@ FunctionEnd
 Function DirectX9Check
   ; http://www.toymaker.info/Games/html/d3dx_dlls.html
   IfFileExists "$SYSDIR\d3dx9_43.dll" DirectXInstalled
-  ; Fire up error, outdated DirectX 9.0c is installed
-  MessageBox MB_OK|MB_ICONSTOP "Can't find DirectX 9.0c (Feb 2010).$\n$\nPress OK to start installer."
+
   ; Run Webinstaller from temp folder
   SetOutPath "$TEMP"
   File ".\Resources\DirectX\dxwebsetup.exe"
@@ -372,45 +429,4 @@ Function DirectX9Check
   
   DirectXInstalled:
   ; Contine installation
- FunctionEnd
-
- /*
-; Options:
-; 1. Use the current solution (check registry for installed redistributable)
-; 2. Use Lexaal's exe to detect redistributable
-; 3. Ignore redistributable and just put msvcr90.dll into Allegiance folder (+ msvcp90.dll for AllSrv),
-;    prime examples for this: Spore, The Guild 2, Civilisation IV, Heroes of Might and Magic V, ...
-;    http://blog.kalmbach-software.de/2008/05/03/howto-deploy-vc2008-apps-without-installing-vcredist_x86exe/
-
-; Check if VC9 is installed
-Function VC90Check
-  ; possible search strings: "Microsoft Visual C++ 2008 ATL Update kb973924", "Microsoft Visual C++ 2008 SP1 Redistributable", "Microsoft Visual C++ 2008 Redistributable"
-  ${registry::Open} "HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\Uninstall" "/K=0 /V=0 /S=1 /B=1 /NI='Microsoft Visual C++ 2008' /T=REG_SZ" $0
-  StrCmp $0 0 0 jm_search ; If we can open registry, jump
-  
-  ; Error, if we con't open Registry
-  MessageBox MB_OK "Could not read registry"
-  ; Closing registry
-  ${registry::Close} "$0"
-  ${registry::Unload}
-  ; exit setup
-  Abort
-
-  jm_search:
-  ${registry::Find} "$0" $1 $2 $3 $4
-  StrCmp $4 "REG_SZ" VC90Installed ; We found the string
-  
-  ; Fire up error, Visual C++ Redist is not installed
-  MessageBox MB_OK|MB_ICONSTOP "You need to install Visual C++ 2008 runtimes.$\n$\nDownload and install it in your operation system language version!$\n$\nPress OK to open download page."
-  ; Run Webinstaller
-  ExecShell Open "http://www.microsoft.com/downloads/en/details.aspx?FamilyID=2051a0c1-c9b5-4b0a-a8f5-770a549fd78c"
-  ; Exit setup
-  Abort
-  
-  VC90Installed:
-  ; Closing registry
-  ${registry::Close} "$0"
-  ${registry::Unload}
-  ; Contine installation
- FunctionEnd
- */
+FunctionEnd

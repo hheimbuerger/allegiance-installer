@@ -6,14 +6,10 @@ http://nsis.sourceforge.net/NSIS_Simple_Firewall_Plugin
 -------------------------------------------------------
 Adding exceptions to Windows Firewall
 
-http://nsis.sourceforge.net/Registry_plug-in
---------------------------------------------
-Searching registry (VC90Check) - not needed ATM (Oct 20th)
-
 http://nsis.sourceforge.net/Inetc_plug-in
 -----------------------------------------
 Downloading files via HTTP (HighRes)
 
 http://nsis.sourceforge.net/Nsis7z_plug-in
 ------------------------------------------
-Extracting 7z files (HighRes)
+Extracting 7z files (.net framework installer/HighRes)
