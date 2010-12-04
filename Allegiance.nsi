@@ -248,7 +248,21 @@ Section -Post
     SetDetailsPrint both
     DetailPrint "... done"
   ${EndIf}
-    
+
+  
+ ; ASGS is not signed, so UAC will ask users to run app as administrator
+ ; Documentation: http://technet.microsoft.com/en-us/library/cc748912(WS.10).aspx
+ ${If} ${AtLeastWinVista}
+   DetailPrint "Adding programs to application compatibillity list..."
+   SetDetailsPrint textonly
+   SetOutPath "$TEMP"
+   File ".\Resources\Compatibility\Compatibility.sdb"
+   ExecWait "sdbinst $TEMP\Compatibility.sdb"
+   Delete "$TEMP\ASGS.sdb"
+   SetDetailsPrint both
+   DetailPrint "... done"
+ ${EndIf}
+
   DetailPrint "-- Installation Complete --"
   
   ; Check if IE is in offline mode
@@ -317,6 +331,14 @@ Section Uninstall
   ; Remove desktop shortcut
   Delete "$DESKTOP\Allegiance.lnk"
   ;Delete "$DESKTOP\Allegiance Learning Guide.lnk"
+
+ ; Remove application compatiblity
+ ${If} ${AtLeastWinVista}
+   SetOutPath "$TEMP"
+   File ".\Resources\Compatibility\Compatibility.sdb"
+   ExecWait "sdbinst -u $TEMP\Compatibility.sdb"
+   Delete "$TEMP\ASGS.sdb"
+ ${EndIf}
   
   ; Remove installation folder
   RMDir /r "$INSTDIR"
