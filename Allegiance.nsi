@@ -83,7 +83,8 @@ Section "Allegiance Game" SECgame
   ; VC DLLs for retail
   File /r /x .svn ".\Resources\VC90\*.*" ;/x .svn excludes SVN folders
   
-  ; VC DLLs for  beta
+  ; VC DLLs for beta
+  SetOutPath "$INSTDIR\Beta"
   File /r /x .svn ".\Resources\VC90\*.*" ;/x .svn excludes SVN folders
   
   SetDetailsPrint listonly
@@ -278,6 +279,7 @@ Section -Post
    ExecShell "open" "http://asgs.alleg.net/asgsnet/newaccount.aspx"
    
   ; oggdec is no longer needed, after installer is finished, so we delete it
+  SetDetailsPrint textonly
   Delete "$INSTDIR\Artwork\oggdec.exe"
 SectionEnd
 
