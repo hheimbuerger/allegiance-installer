@@ -17,7 +17,6 @@ RequestExecutionLevel admin
 !define PRODUCT_PUBLISHER "The Free Allegiance Organization"
 !define PRODUCT_WEB_SITE "http://www.freeallegiance.org"
 !define PRODUCT_UNINST_KEY "Software\Microsoft\Windows\CurrentVersion\Uninstall\${PRODUCT_NAME}"
-!define PRODUCT_UNINST_ROOT_KEY "HKLM"
 
 ; enable Modern User Interface (MUI)
 !include "MUI.nsh"
@@ -171,11 +170,11 @@ Section -Post
 
   ; Writing Uninstaller information
   WriteUninstaller "$INSTDIR\uninst.exe"
-  WriteRegStr ${PRODUCT_UNINST_ROOT_KEY} "${PRODUCT_UNINST_KEY}" "DisplayName" "$(^Name)"
-  WriteRegStr ${PRODUCT_UNINST_ROOT_KEY} "${PRODUCT_UNINST_KEY}" "UninstallString" "$INSTDIR\uninst.exe"
-  WriteRegStr ${PRODUCT_UNINST_ROOT_KEY} "${PRODUCT_UNINST_KEY}" "DisplayVersion" "${PRODUCT_VERSION}"
-  WriteRegStr ${PRODUCT_UNINST_ROOT_KEY} "${PRODUCT_UNINST_KEY}" "URLInfoAbout" "${PRODUCT_WEB_SITE}"
-  WriteRegStr ${PRODUCT_UNINST_ROOT_KEY} "${PRODUCT_UNINST_KEY}" "Publisher" "${PRODUCT_PUBLISHER}"
+  WriteRegStr HKLM "${PRODUCT_UNINST_KEY}" "DisplayName" "$(^Name)"
+  WriteRegStr HKLM "${PRODUCT_UNINST_KEY}" "UninstallString" "$INSTDIR\uninst.exe"
+  WriteRegStr HKLM "${PRODUCT_UNINST_KEY}" "DisplayVersion" "${PRODUCT_VERSION}"
+  WriteRegStr HKLM "${PRODUCT_UNINST_KEY}" "URLInfoAbout" "${PRODUCT_WEB_SITE}"
+  WriteRegStr HKLM "${PRODUCT_UNINST_KEY}" "Publisher" "${PRODUCT_PUBLISHER}"
   SetDetailsPrint both
   DetailPrint "... done"
   
@@ -304,7 +303,7 @@ FunctionEnd
 
 ; Uninstaller - initial message
 Function un.onInit
-  MessageBox MB_ICONQUESTION|MB_YESNO|MB_DEFBUTTON2 "NOTICE: This uninstaller will remove ALL files and directories in the $(^Name) directory, including ones not placed there by the installer.  If you wish to save any of those files, click NO and back them up before proceeding.$\n$\nAre you sure you want to completely remove $(^Name) and all of its components?" IDYES +2
+  MessageBox MB_ICONQUESTION|MB_YESNO|MB_DEFBUTTON2 "NOTICE: This uninstaller will remove ALL files and directories in the $(^Name) directory, including ones not placed there by the installer. If you wish to save any of those files, click NO and back them up before proceeding.$\n$\nAre you sure you want to completely remove $(^Name) and all of its components?" IDYES +2
   Abort
 FunctionEnd
 
@@ -335,17 +334,15 @@ Section Uninstall
   ;Delete "$DESKTOP\Allegiance Learning Guide.lnk"
 
  ; Remove application compatiblity
+ ; If database got renamed, this must get changed, too!
  ${If} ${AtLeastWinVista}
-   SetOutPath "$TEMP"
-   File ".\Resources\Compatibility\Compatibility.sdb"
-   ExecWait "sdbinst -u $TEMP\Compatibility.sdb"
-   Delete "$TEMP\ASGS.sdb"
+   ExecWait "sdbinst -n $\"Free Allegiance - Application Compatibility Database$\""
  ${EndIf}
   
   ; Remove installation folder
   RMDir /r "$INSTDIR"
   
-  ; Remove registry keys
+  ; Remove Allegiance registry keys
   DeleteRegKey HKLM "Software\Microsoft\Microsoft Games\Allegiance"
   
   ; Remove firewall rules
@@ -358,6 +355,9 @@ Section Uninstall
     SimpleFC::RemoveApplication "$INSTDIR\ASGSClient.exe"
     SimpleFC::RemoveApplication "$INSTDIR\ASGSUpdate.exe"
   ${EndIf}
+
+  ; Remove uninstaller information
+  DeleteRegKey HKLM "${PRODUCT_UNINST_KEY}"
   
   SetAutoClose true
 SectionEnd
