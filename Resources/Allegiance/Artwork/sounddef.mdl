@@ -920,15 +920,15 @@ miniGun1BurstSound          = GainSound(SFXGain, PrioritySound(5, ThreeDSound(10
 miniGun2BurstSound          = GainSound(SFXGain, PrioritySound(5, ThreeDSound(100, ASRSound(0.000023, 0.078118, ImportWave("minigun2")))));
 miniGun3BurstSound          = GainSound(SFXGain, PrioritySound(5, ThreeDSound(100, ASRSound(0.000023, 0.082313, ImportWave("minigun3")))));
 
-plasmamini1BurstSound       = GainSound(SFXGain, PrioritySound(5, ThreeDSound(100, RepeatingFireSound(0.125, ImportWave("plasmamini1")))));
-plasmamini2BurstSound       = GainSound(SFXGain, PrioritySound(5, ThreeDSound(100, RepeatingFireSound(0.125, ImportWave("plasmamini2")))));
-plasmamini3BurstSound       = GainSound(SFXGain, PrioritySound(5, ThreeDSound(100, RepeatingFireSound(0.125, ImportWave("plasmamini3")))));
-plasmagat1BurstSound        = GainSound(SFXGain, PrioritySound(5, ThreeDSound(100, RepeatingFireSound(0.125, ImportWave("plasmagat1")))));
-plasmagat2BurstSound        = GainSound(SFXGain, PrioritySound(5, ThreeDSound(100, RepeatingFireSound(0.125, ImportWave("plasmagat2")))));
-plasmagat3BurstSound        = GainSound(SFXGain, PrioritySound(5, ThreeDSound(100, RepeatingFireSound(0.125, ImportWave("plasmagat3")))));
-plasmaac1BurstSound         = GainSound(SFXGain, PrioritySound(5, ThreeDSound(100, RepeatingFireSound(0.125, ImportWave("plasmaac1")))));
-plasmaac2BurstSound         = GainSound(SFXGain, PrioritySound(5, ThreeDSound(100, RepeatingFireSound(0.125, ImportWave("plasmaac2")))));
-plasmaac3BurstSound         = GainSound(SFXGain, PrioritySound(5, ThreeDSound(100, RepeatingFireSound(0.125, ImportWave("plasmaac3")))));
+plasmamini1BurstSound       = GainSound(SFXGain, PrioritySound(5, ThreeDSound(100, ASRSound(0.000023, 0.079864, ImportWave("plasmamini1")))));
+plasmamini2BurstSound       = GainSound(SFXGain, PrioritySound(5, ThreeDSound(100, ASRSound(0.000023, 0.078118, ImportWave("plasmamini2")))));
+plasmamini3BurstSound       = GainSound(SFXGain, PrioritySound(5, ThreeDSound(100, ASRSound(0.000023, 0.082313, ImportWave("plasmamini3")))));
+plasmagat1BurstSound        = GainSound(SFXGain, PrioritySound(5, ThreeDSound(100, ASRSound(0.000023, 0.100658, ImportWave("plasmagat1")))));
+plasmagat2BurstSound        = GainSound(SFXGain, PrioritySound(5, ThreeDSound(100, ASRSound(0.000023, 0.100317, ImportWave("plasmagat2")))));
+plasmagat3BurstSound        = GainSound(SFXGain, PrioritySound(5, ThreeDSound(100, ASRSound(0.000023, 0.100385, ImportWave("plasmagat3")))));
+plasmaac1BurstSound         = GainSound(SFXGain, PrioritySound(5, ThreeDSound(150, ASRSound(0.000023, 0.082404, ImportWave("plasmaac1")))));
+plasmaac2BurstSound         = GainSound(SFXGain, PrioritySound(5, ThreeDSound(150, ASRSound(0.000023, 0.083084, ImportWave("plasmaac2")))));
+plasmaac3BurstSound         = GainSound(SFXGain, PrioritySound(5, ThreeDSound(150, ASRSound(0.000023, 0.083220, ImportWave("plasmaac3")))));
 
 antiUtility1BurstSound      = GainSound(SFXGain, PrioritySound(5, ThreeDSound(100, ASRSound(0.000023, 0.160703, ImportWave("plasmarifle1")))));
 antiUtility2BurstSound      = GainSound(SFXGain, PrioritySound(5, ThreeDSound(100, ASRSound(0.000023, 0.157664, ImportWave("plasmarifle2")))));
