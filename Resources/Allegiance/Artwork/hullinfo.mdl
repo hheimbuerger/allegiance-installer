@@ -103,10 +103,10 @@ creditsPosition = Point(482, 262);
 gaugeBmp = ImportImage("loadoutgaugenowbmp", false);
 gaugeBmpBase = ImportImage("loadoutgaugebasebmp", false);
 
-textRow1 = -30;
+textRow1 = -31;
 textRow2 = -53;
 textRow3 = -76;
-textRow4 = -99;
+textRow4 = -98;
 
 numberColumn1 = 112;
 numberColumn2 = 295;
@@ -115,13 +115,13 @@ gaugeColumn1 =  70;
 gaugeColumn2 = 252;
 
 gaugeRow1 = -37;
-gaugeRow2 = -61;
+gaugeRow2 = -59;
 gaugeRow3 = -82;
-gaugeRow4 = -106;
+gaugeRow4 = -104;
 gauge2Row1 = -42;
-gauge2Row2 = -66;
+gauge2Row2 = -64;
 gauge2Row3 = -87;
-gauge2Row4 = -111;
+gauge2Row4 = -109;
 
 DefenseClassString = 
 	SwitchString(
@@ -186,4 +186,4 @@ hullInfoImage =
     );
 
 hullInfoPosition = Point(225, 350);
-hullInfoPane     = AnimatedImagePaneRect(hullInfoImage, Rect(0, -96, 378, 0)); // KG fix for DX9 - old value= Rect(0, -96, 278, 0)
+hullInfoPane     = AnimatedImagePaneRect(hullInfoImage, Rect(0, -120, 378, 0)); // KG fix for DX9 - old value= Rect(0, -96, 278, 0)

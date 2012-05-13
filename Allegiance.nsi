@@ -18,6 +18,11 @@ RequestExecutionLevel admin
 !define PRODUCT_WEB_SITE "http://www.freeallegiance.org"
 !define PRODUCT_UNINST_KEY "Software\Microsoft\Windows\CurrentVersion\Uninstall\${PRODUCT_NAME}"
 
+# defines for newer versions
+!include Sections.nsh
+# SECTION_OFF is defined in Sections.nsh as 0xFFFFFFFE
+!define SECTION_ON ${SF_SELECTED} # 0x1
+
 ; enable Modern User Interface (MUI)
 !include "MUI.nsh"
 
@@ -79,13 +84,21 @@ Section "Allegiance Game" SECgame
   ; Copy Allegiance
   File /r /x .svn ".\Resources\Allegiance\*.*" ;/x .svn excludes SVN folders
   
-  ; VC DLLs for retail
-  File /r /x .svn ".\Resources\VC90\*.*" ;/x .svn excludes SVN folders
-  
-  ; VC DLLs for beta
-  SetOutPath "$INSTDIR\Beta"
-  File /r /x .svn ".\Resources\VC90\*.*" ;/x .svn excludes SVN folders
-  
+  SetDetailsPrint listonly
+  DetailPrint "... done"
+SectionEnd
+
+; Deploy VC runtimes
+Section /o "Visual C++ 2010 Redist" SECVC
+  SetDetailsPrint both
+  DetailPrint "Starting Visual Studio 2010 redist setup... "
+  SetDetailsPrint none
+  ; Run installer from temp folder
+  ; VC10 installer isn't bound at system language :)
+  SetOutPath "$TEMP"
+  File ".\Resources\VC10\vcredist_x86.exe"
+  ExecWait "$TEMP\vcredist_x86.exe"
+  Delete "$TEMP\vcredist_x86.exe"
   SetDetailsPrint listonly
   DetailPrint "... done"
 SectionEnd
@@ -309,6 +322,14 @@ FunctionEnd
 
 ; Initailisation of installer
 Function .onInit
+  ; VC++ is selected by default
+  Push $0
+  StrCpy $1 ${SECVC} ; Gotta remember which section we are at now...
+  SectionGetFlags ${SECVC} $0
+  IntOp $0 $0 | ${SECTION_ON}
+  SectionSetFlags ${SECVC} $0
+  Pop $0
+
   ; Download page for HighRes files
   ; StrCpy $url "http://www.german-borg.de/files/installer"
 

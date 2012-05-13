@@ -10,12 +10,12 @@ use "newgamescreendata";
 /////////////////////////////////////////////////////////////////////////////
 
 //
-// Title Text  - Imago 7/8/09 fixed typo in SELECT
+// Title Text  - Imago 7/8/09 fixed typo in SELECT, 7/10 fixed typo in GAME SETTINGS
 //
 
 yellowText          = Color(0.878, 0.573, 0);
 whiteText           = Color(1, 1, 1);
-titlePane           = StringPane("SAME SETTINGS", yellowText,  Point(250, 30), JustifyLeft, titleFont);
+titlePane           = StringPane("GAME SETTINGS", yellowText,  Point(250, 30), JustifyLeft, titleFont);
 captionPane         = StringPane("SELECT OR REVIEW THE CURRENT GAME SETTINGS", whiteText, Point(800, 30), JustifyLeft, promptFont);
 
 
@@ -263,10 +263,10 @@ initialMinersCountComboPane           = StringComboPane(size, size, smallFont, T
 initialMinersCountPane = 
     ImagePane(initialMinersCountImage, [(initialMinersCountComboPane, Point(xcombo, ycombo))]);
 
-maxMinersCountImage = ImportImageFromFile("combomaxminerscount.png", true);
-maxMinersCountComboPane           = StringComboPane(size, size, smallFont, TextColor);
-maxMinersCountPane = 
-    ImagePane(maxMinersCountImage, [(maxMinersCountComboPane, Point(xcombo, ycombo))]);
+maxDronesCountImage = ImportImageFromFile("combomaxdronescount.png", true);
+maxDronesCountComboPane           = StringComboPane(size, size, smallFont, TextColor);
+maxDronesCountPane = 
+    ImagePane(maxDronesCountImage, [(maxDronesCountComboPane, Point(xcombo, ycombo))]);
     
     
 asteriodsImage = ImportImageFromFile("comboasteriods.png", true);
@@ -282,11 +282,11 @@ asteriodsPane =
 TeamCountNames = ["2", "3", "4", "5", "6"];
 TeamCountValues = [2, 3, 4, 5, 6];
 
-// maxPlayers
-// R4 changed - keep matching values or client will crash - MaxPerTeam cant go above 100
-MaxPlayersNames = ["1 - 100","10 - 100","30 - 100"];
-MaxPlayersValues = [100, 100, 100];
-MinPlayersValues = [1,   10,  30];
+// maxPlayers - Imago unjacked & properly extended to the new 200 limit 7/10
+MaxPlayersNames = ["1 - 100", "1 - 4", "3 - 6", "4 - 8", "5 - 10", "7 - 15", "10 - 20", "15 - 25", "20 - 30", "25 - 40", "35 - 50", "45 - 60", "55 - 70", "65 - 80", "75 - 90", "85 - 100"];
+MaxPlayersValues = [100, 4, 6, 8, 10, 15, 20, 25, 30, 40, 50, 60, 70, 80, 90, 100];
+MinPlayersValues = [1  , 1, 2, 4,  5,  7, 10, 15, 20, 25, 35, 45, 55, 65, 75,  85];
+
 
 // maxImbalance
 MaxImbalanceNames = ["1", "2", "Auto", "N/A"];
@@ -302,7 +302,7 @@ MapTypeNames = ["Single Ring", "Double Ring", "Pinwheel", "Diamond Ring", "Snowf
 MapTypeValues = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14];
 
 // connectivity
-ConnectivityNames = ["low", "medium", "high"];
+ConnectivityNames = ["Low", "Medium", "High"];
 ConnectivityValues = [7, 2, 0];
 
 // lives
@@ -355,11 +355,11 @@ TerritoryValues = [100, 90, 80];
 // new in R4
 
 // treasures
-TreasuresNames = ["None","Normal","High"];
-TreasureHomeValues        = [0,0,1];
-TreasureNeutralValues     = [0,5,10];
-TreasureRateHomeValues    = [0,0.2,0.4]; // per minute rate
-TreasureRateNeutralValues = [0,0.5,0.5999]; // per minute rate - max must be strictly < 0.6
+TreasuresNames            = ["None","Very Low","Low","Normal","High","Very High"];
+TreasureHomeValues        = [ 0    , 0        , 0   , 0      , 0    , 1         ];
+TreasureNeutralValues     = [ 0    , 1.25     , 2.5 , 5      , 7.5  , 10.099    ];
+TreasureRateHomeValues    = [ 0    , 0.05     , 0.1 , 0.2    , 0.3  , 0.4       ]; // per minute rate
+TreasureRateNeutralValues = [ 0    , 0.3      , 0.4 , 0.5    , 0.55 , 0.5999    ]; // per minute rate - max must be strictly < 0.6
 
 MapSizeNames = ["Small","Large"];
 MapSizeValues = [0,1];
@@ -367,8 +367,8 @@ MapSizeValues = [0,1];
 initialMinersNames = ["0","1","2","3","4","5","6","7","8","9","10"];
 initialMinersValues = [0,1,2,3,4,5,6,7,8,9,10];
 
-maxMinersNames = ["0","1","2","3","4","5","6","7","8","9","10"];
-maxMinersValues = [0,1,2,3,4,5,6,7,8,9,10];
+maxDronesNames = ["0","1","2","3","4","5","6","7","8","9","10"];
+maxDronesValues = [0,1,2,3,4,5,6,7,8,9,10];
 
 AsteriodsNames         = ["Low", "Normal", "High"];
 AsteriodsHomeValues    = [10,20,40]; // max allowed is 40
@@ -507,7 +507,7 @@ screen =
            (HoverPane(hoverSite, 39, treasuresPane                   ), Point( x2, 436)),
            (HoverPane(hoverSite, 38, mapSizePane                     ), Point( x3, 276)),
            (HoverPane(hoverSite, 40, initialMinersCountPane          ), Point( x3, 476)),
-           (HoverPane(hoverSite, 41, maxMinersCountPane              ), Point( x3, 516)),
+           (HoverPane(hoverSite, 41, maxDronesCountPane              ), Point( x3, 516)),
            
            (HoverPane(hoverSite, 42, asteriodsPane                   ), Point( x2, 516)),
            

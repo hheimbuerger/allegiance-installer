@@ -5,9 +5,9 @@ use "custombrief";
 
 ///////////////////////////////////////////////////////////////////////////////
 // Tip of the Game
-numTips = "45";
+numTips = "40";
 
-Tip1 = "You can find a list of commonly used abbreviations in the Allegiance Help Menu.  Press F1 to access it in-game.";
+Tip1 = "Use your I key to toggle between Radar modes. None-target only-default-all";
 Tip2 = "Use Ctrl-G to turn on the grid feature when flying.";
 Tip3 = "Remember to turn off your nanite gun when flying a Ga'Taraan Scout (Press 1 to select the gun, 2 to select the nanite -- press the same number again to select all-fire again).";
 Tip4 = "When not sure what to do, deploy more probes.";
@@ -17,14 +17,15 @@ Tip7 = "Alephs are arranged in sectors geometrically. Use F3 to scout the map.";
 Tip8 = "Place your probes off-plane (above and below the grid) to lower the chances of them being found.";
 Tip9 = "Did you know you can ripcord while boosting? Hit R while holding the boost button.";
 Tip10 = "Rixian combat pods only fire on what you have targeted when you deploy them (they won't switch targets with you).";
-Tip11 = "Phoenix bombers (and all Nix piloted ships) can *NOT* be repaired with a nanite gun.";
+//Tip11 = "Phoenix bombers (and all Nix piloted ships) can *NOT* be repaired with a nanite gun.";
+Tip11 = "Use Shift+F6 when commanding to see how long your teammates have been in base."; //Imago 7/11
 Tip12 = "A Belter Stealth Fighter can be an awesome nan for a Stealth Bomber";
 Tip13 = "Ctrl-w lets you select all weapons. Pressing 1,2 or 3 will activate that gun only.";
 Tip14 = "Prox mines, as you're flying forward, appear behind you. Backpedal, and they'll appear in front.";
 Tip15 = "Camp means to gather at a choke point, an aleph (usually), or an enemy base opening.";
 Tip16 = "Calling the drop, BIOS figs, non tf scouts, have prox mines, a 'drop' command means to drop prox mines at the choke point (in preparation of an incoming bomber, etc.)";
 Tip17 = "You can boost immediately during the launch sequence when exiting a base. Useful when exiting a base that is camped.";
-Tip18 = "Do NOT drop probes right after launching from a station.  The red door of the base is the exit door, by dropping probes in front of it you cause everyone exiting the base to bounce off it, which is infuriating.";
+Tip18 = "Place your probes off-plane (above and below the grid) to lesson the chances of them being found.";
 Tip19 = "When turreting, your throttle controls act as a 'zoom' feature; use this to your advantage.";
 Tip20 = "Hold down forward thrust when getting rammed in a bomber, it will carry your speed longer.";
 Tip21 = "Allegiance is a competitive TEAM-based game. Players must work together to complete goals, and commanders may eject players who are not contributing to their teams.";
@@ -32,8 +33,8 @@ Tip22 = "The Allegiance Community has dedicated a LOT of time into helping every
 Tip23 = "After training, learn basic gameplay and technology on the Newbie servers. Once you've mastered the basics, join the vets and don't look back.";
 Tip24 = "Games with an imbalanced skill are NOT fun. If you're new, don't join the team with the most new players.";
 Tip25 = "As with all communities, Allegiance has 'good apples' and 'bad apples.' Don't let the bad ones ruin your fun.";
-Tip26 = "During an enemy attack nans will try and keep the main attacker alive. It is crucial that you attack the nans first because any damage you attempt to inflict on the main target will be instantly repaired. ";
-Tip27 = "Constructors have to line up on an asteroid exactly before 'diving in' and building the base. By ramming its nose or tail, you can swing it around forcing it to attempt again, buying your team precious seconds to kill it.";
+Tip26 = "Enemy nans will often be with important targets. Attack the nans first because any damage you attempt to inflict on the main target will be instantly repaired.)";
+Tip27 = "If you are too close to a friendly con it will think you're on a collision course, and try to avoid you. This can delay it's building time.";
 Tip28 = "Both shields and missiles raise your radar signature, making it easier for the enemy to spot you.  Keep them in cargo when you don't need them.";
 Tip29 = "Picking up teammates who are in a lifepod transports them instantly back to base, where they can immediately launch to help defend, attack, or whatever again.";
 Tip30 = "If no one probes then the enemy will always surprise you, always have the upper hand, and your team will lose. This is a fact.";
@@ -46,13 +47,7 @@ Tip36 = "Bios pods have the unique ability to ripcord.  They also are able to eq
 Tip37 = "You can pick up objects dropped by your enemy or spawned randomly.  The 'T' symbol in F3 indicates an unresearched technology.  Pick them up and return them to base.";
 Tip38 = "Commanders use the team's income as they feel is best for the team.  Not all ships are free.  You must request to purchase them, but the commander will not always say yes.";
 Tip39 = "Pay attention to the map preview shown before entering a game.  Learn what each map looks like and you will be able to find alephs much faster.";
-Tip40 = "It is strongly recommended to remap the default keys to something comfortable for you. *NEVER* use the keyboard to fly! Always use your mouse, or a joystick if you prefer. The keyboard should supplement your primary input device.";
-Tip41 = "Use your I key to toggle between Radar modes. None-target only-default-all";
-Tip42 = "Did you know you can greatly improve the graphics in Allegiance?  Visit the Art and Ingame Content forum at FreeAllegiance.org for information on downloading high resolution textures.";
-Tip43 = "If you are too close to a friendly con it will think you're on a collision course, and try and avoid you. This can delay its building time allowing the enemy the precious seconds needed to destroy it.";
-Tip44 = "Picking up teammates who are in a lifepod transports them instantly back to base, where they can immediately launch to help defend, attack, or whatever again.";
-Tip45 = "Killing an enemy life pod does not increase your kill count. All it does is return the enemy pilot straight back to base and resets his kill bonus.";
-
+Tip40 = "Some of the best players in the game fly with a mouse and some fly with a joystick.  A couple even fly with controllers.  You should avoid using the keyboard to fly.";
 
 ///////////////////////////////////////////////////////////////////////////////
 // civ-specific strings
@@ -317,7 +312,7 @@ missionBriefingMapStr = StringPane(missionBriefingMapType, white, Point(118, 32)
 missionBriefingTextBody = AnimatedImagePaneRect(StringImage(JustifyLeft, 306, medVerdana, white, missionBriefingBodyText), Rect(0, -131, 306, 0));
 missionBriefingCountDown = StringPane(NumberString(countdown), white, Point(36, 36), JustifyCenter, hugeBoldFont);
 missionBriefingTeamImage = AnimatedImagePaneRect(teamImage, Rect(0, 0, 73, 68));
-missionTipText = AnimatedImagePaneRect(StringImage(JustifyLeft, 416, medVerdana, white, missionBriefingTipText), Rect(0, -131, 416, 0));
+missionTipText = AnimatedImagePaneRect(StringImage(JustifyLeft, 250, medVerdana, white, missionBriefingTipText), Rect(0, -131, 306, 0));
 
 // R4
 //mapPreviewPane      = MapPreviewPane(Rect(0, 0, 120, 96),false,true);
@@ -335,7 +330,7 @@ MissionBriefDialog =
                   (missionBriefingTextBody, Point(27, 240)),
 			(missionBriefingMapStr, Point(365, 162)),
                   (mapPreviewPane, Point(365, 177)), //R4
-			(missionTipText, Point(45, 72)) //R4
+			(missionTipText, Point(225, 82)) //R4
                 ]
             )
         );

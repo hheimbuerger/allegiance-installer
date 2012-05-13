@@ -59,7 +59,7 @@ waterMarkPane =
 // "teamscreentabselbmp" (selected), the arrow next to the player's team is from,
 // "teamscreenarrowbmp", and the civ icons are from the icon names in the database.
 
-teamColorBrightness     = 0.62;
+teamColorBrightness     = 0.50;
 teamColorIntensity      = 0.50;
 teamColumns             = [9, 143, 166, 220, 220]; // = [team name, num players, join button, gradient start, width]
 teamListPane            = ListPane(Point(220, 308));
