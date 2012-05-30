@@ -75,9 +75,14 @@ ShowUnInstDetails show
 
 Section "Allegiance Game" SECgame
   SectionIn RO
-  SetDetailsPrint both
-  DetailPrint "Extracting Files..."
   SetDetailsPrint textonly
+  DetailPrint "Checking DirectX installation..."
+  Call DirectX9Check
+  DetailPrint "... OK"
+  DetailPrint "Checking .net framework 2.0 installation..."
+  Call DotNetVersionCheck
+  DetailPrint ".... OK"
+  DetailPrint "Extracting game files..."
   SetOutPath "$INSTDIR"
   SetOverwrite on
   
@@ -289,6 +294,9 @@ Section -Post
   ; Ask if user wants to create new account
   MessageBox MB_ICONQUESTION|MB_YESNO "Do you want to create a new account, to play online?$\n$\nIf you already have a ASGS account, you can click on NO." IDYES 0 IDNO +2
    ExecShell "open" "http://asgs.alleg.net/asgsnet/newaccount.aspx"
+
+  ; Let people know we aren't playing 24/7
+  MessageBox MB_ICONINFORMATION|MB_OK "Notice:$\n$\nGame servers maybe empty.$\n$\nYou may find players online between 2 pm and midnight New York time (EST) (European evening)."
    
   ; oggdec is no longer needed, after installer is finished, so we delete it
   SetDetailsPrint textonly
@@ -299,6 +307,7 @@ SectionEnd
 !insertmacro MUI_FUNCTION_DESCRIPTION_BEGIN
   ; THIS CAKE IS A LIE!
   !insertmacro MUI_DESCRIPTION_TEXT ${SECgame} "Basic game components."
+  !insertmacro MUI_DESCRIPTION_TEXT ${SECVC} "Visual Studio 2010 redistributables$\n$\nThis component is requiered to play the game."
   !insertmacro MUI_DESCRIPTION_TEXT ${SECunpackOGG} "Transcodes the game audio from OGG to WAV.$\n$\nThis option is only recommended for slow computers and will increase install time."
 /*
 Example of download content
@@ -334,9 +343,6 @@ Function .onInit
   ; StrCpy $url "http://www.german-borg.de/files/installer"
 
   Call WindowsVersionCheck
-  Call DirectX9Check
-  ;Call VC90Check
-  Call DotNetVersionCheck
 FunctionEnd
 
 ; Uninstaller - remove files
@@ -466,6 +472,9 @@ Function DirectX9Check
   ; http://www.toymaker.info/Games/html/d3dx_dlls.html
   IfFileExists "$SYSDIR\d3dx9_43.dll" DirectXInstalled
 
+  ; Fire up error, outdated DirectX detected
+  MessageBox MB_ICONSTOP|MB_OK "$(^Name) couldn't detect DirectX 9.0c (February 2010 Update), press OK to run DirectX installer."
+  
   ; Run Webinstaller from temp folder
   SetOutPath "$TEMP"
   File ".\Resources\DirectX\dxwebsetup.exe"
