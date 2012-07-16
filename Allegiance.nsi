@@ -46,7 +46,7 @@ RequestExecutionLevel admin
 !insertmacro MUI_PAGE_WELCOME
 ; License page
 !define MUI_LICENSEPAGE_CHECKBOX
-!insertmacro MUI_PAGE_LICENSE ".\Resources\Allegiance\EULA.RTF"
+!insertmacro MUI_PAGE_LICENSE ".\Resources\ACSS\EULA.RTF"
 ; Components page
 !insertmacro MUI_PAGE_COMPONENTS
 ; Directory page
@@ -83,14 +83,12 @@ Section "Allegiance Game" SECgame
   Call DotNetVersionCheck
   DetailPrint ".... OK"
   DetailPrint "Extracting game files..."
-  SetOutPath "$INSTDIR"
   SetOverwrite on
 
-/* Productive ACSS
-  ; Copy Productive
-  SetOutPath "$INSTDIR\Productive"
+ ; Copy Production
+  SetOutPath "$INSTDIR\Production"
   File /r /x .svn ".\Resources\Allegiance\*.*" ;/x .svn excludes SVN folders
-*/
+
   ; Copy Beta
   SetOutPath "$INSTDIR\Beta"
   File /r /x .svn ".\Resources\Allegiance\*.*" ;/x .svn excludes SVN folders
@@ -131,8 +129,10 @@ Section /o "Unpack OGG Files" SECunpackOGG
   SetDetailsPrint listonly
   DetailPrint "(this will take several minutes)"
   SetDetailsPrint none
-  SetOutPath "$INSTDIR\Artwork"
-  ExecWait '"$INSTDIR\Artwork\oggdec.exe" "$INSTDIR\Artwork\*.ogg"'
+  SetOutPath "$INSTDIR\Production\Artwork"
+  ExecWait '"$INSTDIR\Production\Artwork\oggdec.exe" "$INSTDIR\Production\Artwork\*.ogg"'
+  SetOutPath "$INSTDIR\Beta\Artwork"
+  ExecWait '"$INSTDIR\Beta\Artwork\oggdec.exe" "$INSTDIR\Beta\Artwork\*.ogg"'
   SetDetailsPrint listonly
   DetailPrint "... done"
 SectionEnd
@@ -215,30 +215,29 @@ Section -Post
   SetDetailsPrint textonly
   
   ; ACSS registry keys
+  WriteRegStr HKLM "Software\Microsoft\Microsoft Games\Allegiance\1.2" "Lobby Path" "$INSTDIR"
   WriteRegStr HKLM "Software\Microsoft\Microsoft Games\Allegiance\1.2\" "ClientService" "https://allsrvbox.alleg.net/CSSServer/ClientService.svc"
   WriteRegStr HKLM "Software\Microsoft\Microsoft Games\Allegiance\1.2\" "ManagementWebRoot" "http://allsrvbox.alleg.net"
   
-/* Productive ACSS
-  ; Artpath
-  WriteRegStr HKLM "Software\Microsoft\Microsoft Games\Allegiance\1.0" "ArtPath" "$INSTDIR\Production\Artwork"
-  ; EXE Path - Install directory of Allegiance.exe
-  WriteRegStr HKLM "Software\Microsoft\Microsoft Games\Allegiance\1.0" "EXE Path" "$INSTDIR\Production"
-  ; CfgFile - Where to get config file
-  WriteRegStr HKLM "Software\Microsoft\Microsoft Games\Allegiance\1.0" "CfgFile" "http://allsrvbox.alleg.net/allegiance.txt"
-  ; FIRSTRUN - still used?
-  WriteRegDWORD HKLM "Software\Microsoft\Microsoft Games\Allegiance\1.0" "FIRSTRUN" "1"
-  ; HasTrained - Training mission popup
-  WriteRegDWORD HKLM "Software\Microsoft\Microsoft Games\Allegiance\1.0" "HasTrained" "0"
-*/
-  ; BETA ArtPath - Defines Artwork path
-  WriteRegStr HKLM "Software\Microsoft\Microsoft Games\Allegiance\1.2" "ArtPath" "$INSTDIR\Beta\Artwork"
-  ; BETA EXE Path
-  WriteRegStr HKLM "Software\Microsoft\Microsoft Games\Allegiance\1.2" "EXE Path" "$INSTDIR\Beta"
-  ; BETA CfgFile
-  WriteRegStr HKLM "Software\Microsoft\Microsoft Games\Allegiance\1.2" "CfgFile" "http://allsrvbox.alleg.net/allegiance-beta.txt"
-  ; BETA FIRSTRUN
+ ; ArtPath - Defines Artwork path
+  WriteRegStr HKLM "Software\Microsoft\Microsoft Games\Allegiance\1.2" "ArtPath" "$INSTDIR\Production\Artwork"
+  WriteRegStr HKLM "Software\Microsoft\Microsoft Games\Allegiance\1.2" "BetaArtPath" "$INSTDIR\Beta\Artwork"
+  WriteRegStr HKLM "Software\Microsoft\Microsoft Games\Allegiance\1.2" "ProductionArtPath" "$INSTDIR\Production\Artwork"
+
+ ; EXE Path
+  WriteRegStr HKLM "Software\Microsoft\Microsoft Games\Allegiance\1.2" "EXE Path" "$INSTDIR\Production"
+  WriteRegStr HKLM "Software\Microsoft\Microsoft Games\Allegiance\1.2" "Beta EXE Path" "$INSTDIR\Beta"
+  WriteRegStr HKLM "Software\Microsoft\Microsoft Games\Allegiance\1.2" "Production EXE Path" "$INSTDIR\Production"
+
+ ; CfgFile
+  WriteRegStr HKLM "Software\Microsoft\Microsoft Games\Allegiance\1.2" "CfgFile" "http://allsrvbox.alleg.net/allegiance.txt"
+  WriteRegStr HKLM "Software\Microsoft\Microsoft Games\Allegiance\1.2" "BetaCfgFile" "http://allsrvbox.alleg.net/allegiance-beta.txt"
+  WriteRegStr HKLM "Software\Microsoft\Microsoft Games\Allegiance\1.2" "ProductionCfgFile" "http://allsrvbox.alleg.net/allegiance.txt"
+
+  ; FIRSTRUN
   WriteRegDWORD HKLM "Software\Microsoft\Microsoft Games\Allegiance\1.2" "FIRSTRUN" "1"
-  ; BETA HasTrained - Disabled
+
+  ; HasTrained - Disabled
   WriteRegDWORD HKLM "Software\Microsoft\Microsoft Games\Allegiance\1.2" "HasTrained" "1"
   
   SetDetailsPrint both
@@ -269,11 +268,11 @@ Section -Post
     ; This runs only, if Windows Firewall is active
     DetailPrint "Adding exceptions to Windows Firewall..."
     SetDetailsPrint textonly
-/* Productive ACSS
+
     SimpleFC::AddApplication "Free Allegiance - Game" "$INSTDIR\Production\Allegiance.exe" 0 2 "" 1
-*/
     SimpleFC::AddApplication "Free Allegiance - Game Beta" "$INSTDIR\Beta\Allegiance.exe" 0 2 "" 1
     SimpleFC::AddApplication "Free Allegiance - ACSS" "$INSTDIR\Launcher.exe" 0 2 "" 1
+
     SetDetailsPrint both
     DetailPrint "... done"
   ${EndIf}
@@ -308,7 +307,8 @@ Section -Post
    
   ; oggdec is no longer needed, after installer is finished, so we delete it
   SetDetailsPrint textonly
-  Delete "$INSTDIR\Artwork\oggdec.exe"
+  Delete "$INSTDIR\Beta\Artwork\oggdec.exe"
+  Delete "$INSTDIR\Production\Artwork\oggdec.exe"
 SectionEnd
 
 ; Section descriptions
@@ -386,11 +386,11 @@ Section Uninstall
   Pop $1
   ${If} $1 == 1
     ; This runs only, if Windows Firewall is active
-/* Productive ACSS
+
     SimpleFC::RemoveApplication "$INSTDIR\Production\Allegiance.exe"
-*/
     SimpleFC::RemoveApplication "$INSTDIR\Beta\Allegiance.exe"
     SimpleFC::RemoveApplication "$INSTDIR\Launcher.exe"
+
   ${EndIf}
 
   ; Remove uninstaller information
