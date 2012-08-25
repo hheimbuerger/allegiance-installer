@@ -240,14 +240,26 @@ Section -Post
   SetDetailsPrint textonly
   ; Allow users to write into Allegiance directory
   AccessControl::EnableFileInheritance "$INSTDIR"
-  AccessControl::GrantOnFile "$INSTDIR" "(BU)" "GenericRead + GenericWrite"
+  ${If} ${AtLeastWinVista}
+    AccessControl::GrantOnFile "$INSTDIR" "(S-1-5-32-545)"  "GenericRead + GenericExecute + GenericWrite + Delete"
+  ${Else}
+    AccessControl::GrantOnFile "$INSTDIR" "(BU)"  "GenericRead + GenericExecute + GenericWrite + Delete"
+  ${EndIf}
   ; Allow users to write registry settings
   ${If} ${RunningX64}
     AccessControl::EnableRegKeyInheritance  HKLM "Software\\Wow6432Node\\Microsoft\\Microsoft Games\\Allegiance"
-    AccessControl::GrantOnRegKey HKLM "Software\\Wow6432Node\\Microsoft\\Microsoft Games\\Allegiance" "(BU)" "FullAccess"
+    ${If} ${AtLeastWinVista}
+	 AccessControl::GrantOnRegKey HKLM "Software\\Wow6432Node\\Microsoft\\Microsoft Games\\Allegiance" "(S-1-5-32-545)" "FullAccess"
+	${Else}
+	 AccessControl::GrantOnRegKey HKLM "Software\\Wow6432Node\\Microsoft\\Microsoft Games\\Allegiance" "(BU)" "FullAccess"
+	${EndIf}
   ${Else}
     AccessControl::EnableRegKeyInheritance  HKLM "Software\\Microsoft\\Microsoft Games\\Allegiance"
-    AccessControl::GrantOnRegKey HKLM "Software\\Microsoft\\Microsoft Games\\Allegiance" "(BU)" "FullAccess"
+	${If} ${AtLeastWinVista}
+	  AccessControl::GrantOnRegKey HKLM "Software\\Microsoft\\Microsoft Games\\Allegiance" "(S-1-5-32-545)" "FullAccess"
+	${Else}
+	  AccessControl::GrantOnRegKey HKLM "Software\\Microsoft\\Microsoft Games\\Allegiance" "(BU)" "FullAccess"
+	${EndIf}
   ${EndIf}
   SetDetailsPrint both
   DetailPrint "... done"
