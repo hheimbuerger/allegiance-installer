@@ -216,8 +216,8 @@ Section -Post
   ; ACSS registry keys - Note, ACSS depends on the 1.2 version of the registry. If you want to change
   ; this version number in the future, you will need to update ACSS and the Allegiance code base.
   WriteRegStr HKLM "Software\Microsoft\Microsoft Games\Allegiance\1.2" "Lobby Path" "$INSTDIR"
-  WriteRegStr HKLM "Software\Microsoft\Microsoft Games\Allegiance\1.2\" "ClientService" "https://allsrvbox.alleg.net/CSSServer/ClientService.svc"
-  WriteRegStr HKLM "Software\Microsoft\Microsoft Games\Allegiance\1.2\" "ManagementWebRoot" "http://allsrvbox.alleg.net"
+  WriteRegStr HKLM "Software\Microsoft\Microsoft Games\Allegiance\1.2\" "ClientService" "https://acss.alleg.net/CSSServer/ClientService.svc"
+  WriteRegStr HKLM "Software\Microsoft\Microsoft Games\Allegiance\1.2\" "ManagementWebRoot" "http://acss.alleg.net"
   
 
   ; ArtPath - Defines Artwork path
@@ -231,9 +231,9 @@ Section -Post
   WriteRegStr HKLM "Software\Microsoft\Microsoft Games\Allegiance\1.2" "Production EXE Path" "$INSTDIR\Production"
   
   ; CfgFile
-  WriteRegStr HKLM "Software\Microsoft\Microsoft Games\Allegiance\1.2" "CfgFile" "http://allsrvbox.alleg.net/allegiance.txt"
-  WriteRegStr HKLM "Software\Microsoft\Microsoft Games\Allegiance\1.2" "BetaCfgFile" "http://allsrvbox.alleg.net/allegiance-beta.txt"
-  WriteRegStr HKLM "Software\Microsoft\Microsoft Games\Allegiance\1.2" "ProductionCfgFile" "http://allsrvbox.alleg.net/allegiance.txt"
+  WriteRegStr HKLM "Software\Microsoft\Microsoft Games\Allegiance\1.2" "CfgFile" "http://acss.alleg.net/allegiance.txt"
+  WriteRegStr HKLM "Software\Microsoft\Microsoft Games\Allegiance\1.2" "BetaCfgFile" "http://acss.alleg.net/allegiance-beta.txt"
+  WriteRegStr HKLM "Software\Microsoft\Microsoft Games\Allegiance\1.2" "ProductionCfgFile" "http://acss.alleg.net/allegiance.txt"
   
   ; FIRSTRUN
   WriteRegDWORD HKLM "Software\Microsoft\Microsoft Games\Allegiance\1.2" "FIRSTRUN" "1"
