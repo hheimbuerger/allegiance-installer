@@ -187,6 +187,27 @@ ColonialStarbaseInternalSound  = GainSound(SFXGain,
 //BSG sounds
 
 //
+// Draconium Sounds - Begin
+//
+
+ta_dracStarbaseInternalSound     = GainSound(SFXGain, 
+                                PairedSound(
+                                    PitchSound(0.5, LoopingSound(ImportWave("shipint"))),
+                                    GainSound(-7, IntermittentSound(5, false, RandomSound([
+                                        (ImportWave("ta_drac01"), 1),
+                                        (ImportWave("ta_drac02"), 1),
+                                        (ImportWave("ta_drac03"), 1),
+                                        (ImportWave("ta_drac04"), 1),
+                                        (ImportWave("ta_drac06"), 1),
+                                        (ImportWave("ta_drac07"), 1)
+				    ])))
+                                ));
+
+//
+// Draconium Sounds - End
+//
+
+//
 // Omicron Hive Sounds - Begin
 //
 
@@ -250,6 +271,8 @@ faohomega3BurstSound       = GainSound(SFXGain, PrioritySound(5, ThreeDSound(500
 //
 // Omicron Hive Sounds - End
 //
+
+
 
 newShipSound                = GainSound(SFXGain, ImportWave("newtarget"));
 newEnemySound               = GainSound(SFXGain, ImportWave("newtargetenemy"));
@@ -2022,6 +2045,8 @@ soundList =
 	  (450, TFStarbaseInternalSound),
 	  (451, dn_PhStarbaseInternalSound),
 	  (452, OHStarbaseInternalSound),
+	  (453, ta_dracStarbaseInternalSound),
+
 
         (460, ILStarbaseAlertSound),
 
