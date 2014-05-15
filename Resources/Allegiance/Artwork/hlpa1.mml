@@ -1,10 +1,6 @@
 <Font|headerFont>ALLEGIANCE<p><p><Color|white>
-<Font|helpFont>Allegiance is a game corresponding to massively multiplayer online games. Allegiance is unique in that it also has Commanders, 
-bringing a more-than-complete Real Time Strategy (RTS) aspect to the game. The <Secondary|hlpdefcommander|commander> is the one who should receive all the 
-money, who should order around the <Secondary|hlpdefminer|miners> and constructors, and who chooses technology, invests money, organizes the team. 
-All in all, he's the boss, and you report to him.<p><p>
+<Font|helpFont>Allegiance is a free, online, multi-player space simulation game. You pilot spacecraft, flying in a team with other players, defending and attacking sectors in space. Your team is led by a <Secondary|hlpdefcommander|Commander> who makes tactical decisions and invests in technology and bases. Flight and combat is done in first person view in a 3D environment, with a real-time, top-down 'Command view' of your immediate surroundings also available.
 
-The number of players involved in a game can have dramatic effects on what type of strategy is going to be used. A small 
-game will be played on a small map, without too many resources, and small assaults, whereas big six-teamers may reveal secret 
-alliances between factions, assaults using fleets of capital ships, multiple surprise, stealth assaults coupled with teleport 
-assaults, huge battles, sector overloads, and a lot more resources.
+<p><p>While this sounds simple enough Allegiance is anything but an easy game to learn, even with its relatively basic control scheme and its simplified flight model. Allegiance is about tactics and coordination; knowing your ordnance and, most importantly, knowing where to be and what you should be doing there. Given the enormous amount of factors to reckon with, it takes the average player somewhere between 3 and 6 months to firmly grasp the basics.
+
+<p><p>On the plus side, Allegiance is full of interesting ways to turn spaceships into debris. Depending on the technology path your Commander has chosen you might fly stealthcraft, hiding and sniping at your unsuspecting enemies from far away. You might fly the interceptor, the king of short-range dogfights. Perhaps you might pilot a bomber, with other players manning the anti-fighter turrets on your ship. Or you could be the infinitely useful scout that spots enemy movements, repairs friendly vessels, and can even deploy minefields to devastate an enemy attack. 

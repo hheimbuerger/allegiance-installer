@@ -36,6 +36,8 @@ offline
 arena for some basic firing practice against computer-controlled drones. See how long
 you can survive in this ongoing mission that only ends ... when you do!<p><p>
 
+<Font|smallBoldFont>Mission 7: Support Role I(Nanning) --<Font|helpFont>One of the most critical tasks new players must master immediately is nanning, use of a nanite repair gun to repair ships and stations.  In this mission you will discover the benefit of repairing miners that are being attacked, learn how to repair a damaged station, and escort a bomber attempting to destroy an enemy outpost.<p><p>
+
 <Font|smallBoldFont>To play a training mission<Font|helpFont><p><p>
 
 <Image|hlpimg1>On the Allegiance main menu, click
@@ -45,8 +47,3 @@ you can survive in this ongoing mission that only ends ... when you do!<p><p>
 click <Font|smallBoldFont>Launch Mission.<Font|helpFont><p><p>
 
 <Image|hlpimg3>To exit a mission at any time, press ESC, Q.<p><p>
-
-Be aware that the training missions will ignore any <Main|hlpc7|controls> you
-<Main|hlpc7c|reconfigure> and use the default settings for your <Main|hlpc7a|keyboard> and
-<Main|hlpc7b|joystick>, not your customized ones, so you may wish to learn the game with
-the default controls first and then switch over to your new control settings.

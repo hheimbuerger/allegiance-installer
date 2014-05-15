@@ -49,13 +49,6 @@ pilot has accepted.<p><p>
 Along the bottom of the Team display are additional buttons that provide
 you with further team interaction.<p><p>
 
-<Font|smallBoldFont>Team Deposit/Stop Donating --<Font|helpFont>Makes
-continuous deposits of all your money to whomever you select, usually your
-team leader or investor.<p><p>
-
-<Font|smallBoldFont>Single Deposit --<Font|helpFont>Makes a single
-deposit of 100 credits to whomever you select.<p><p>
-
 <Font|smallBoldFont>Take Me To --<Font|helpFont>Transports you, via
 Command view, to the selected player or computer-controlled ship, such as a constructor or
 miner. This will also work with any enemy teams you have encountered. If an enemy player is

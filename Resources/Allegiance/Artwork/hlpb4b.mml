@@ -50,8 +50,7 @@ thereby reducing the connectivity between them and changing the map considerably
 <Bullet|hlpbullet|<Font|smallBoldFont>Max Team Imbalance:<Font|helpFont> This sets the maximal imbalance that can occur 
 between any two teams. Setting it to N/A is generally reserved to special games.><p><p>
 
-<Bullet|hlpbullet|<Font|smallBoldFont>Stats Count:<Font|helpFont> When turned on, the statistics of the game will count 
-toward the permanent statistical record of the AZ.><p><p>
+<Bullet|hlpbullet|<Font|smallBoldFont>Stats Count:<Font|helpFont> When turned on, statistics from the game will be saved.><p><p>
 
 <Bullet|hlpbullet|<Font|smallBoldFont>Allow Defections:<Font|helpFont> This allows players to change teams. It is generally 
 turned off for a two-team game to keep players from joining the other team to see everything they have, and then join the 

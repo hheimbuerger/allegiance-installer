@@ -16,20 +16,15 @@ topics =
             "ABOUT", "hlpa0", "hlpblanksub",
             [
 			
-            	("Overview", "hlpa1", "hlpasub", 
+            	("Allegiance", "hlpa1", "hlpasub", 
 			[
 		 		("Strategy Basics", "hlpa1a", "hlpasub", []),
-                     	("Your Role", "hlpa1b", "hlpasub", [])
+                     		("Your Role", "hlpa1b", "hlpasub", [])
 			]),
- 			("FAZ", "hlpa01", "hlpblanksub", []),
                 	("Learning", "hlpa2", "hlpblanksub",
                  	[
-		 		("Training Missions", "hlpa2a", "hlpblanksub", []),
-            		("Newbie Servers", "hlpa2b", "hlpblanksub", []),
-		 		("Academy", "hlpa2c", "hlpblanksub", []),
-                        ("@Cadet", "hlpa2d", "hlpblanksub", []),
-            		("Help Menu", "hlpa2e", "hlpblanksub", [])
-                  ]),
+		 		("Training Missions", "hlpa2a", "hlpblanksub", [])
+                  	]),
 			("Rules of Conduct", "hlpa3", "hlpblanksub", []),
 			("FAZ Credits", "hlpa4", "hlpblanksub", [])
 		]
@@ -38,13 +33,9 @@ topics =
 	(
             "CONNECT & START", "hlpb0", "hlpblanksub",
             [
-                	("Connecting", "hlpb1", "hlpblanksub", 
-			[
-				("LAN Games", "hlpb1a", "hlpblanksub", []),
-				("MotD & Auto-Update", "hlpb1b", "hlpblanksub", []),
-				("Games List", "hlpb1c", "hlpblanksub", []),
-				("Troubleshooting", "hlpb1d", "hlpblanksub", [])
-			]),
+
+			("Games List", "hlpb1c", "hlpblanksub", []),
+			("Troubleshooting", "hlpb1d", "hlpblanksub", []),
 			("Team Lobby", "hlpb2", "hlpblanksub", 
 			[
 				("Teams Section", "hlpb2a", "hlpblanksub", []),
@@ -53,17 +44,10 @@ topics =
 				("Game Owner Options", "hlpb2d", "hlpblanksub", []),
 				("Chat", "hlpb2e", "hlpblanksub", [])
 			]),
-                	("Cores", "hlpb3", "hlpblanksub", 
-			[
-				("DN", "hlpb3a", "hlpblanksub", []),
-				("A+", "hlpb3b", "hlpblanksub", []),
-				("PC2", "hlpb3c", "hlpblanksub", []),
-				("EoR", "hlpb3d", "hlpblanksub", []),
-				("RPS", "hlpb3e", "hlpblanksub", [])
-			]),
+			("Cores", "hlpb3", "hlpblanksub", []),
 			("Settings", "hlpb4", "hlpblanksub", 
 			[
-            		("Win Conditions", "hlpb4a", "hlpblanksub", []),
+            			("Win Conditions", "hlpb4a", "hlpblanksub", []),
 		 		("Game Options", "hlpb4b", "hlpblanksub", [])
 			]),
                 	("Options", "hlpb5", "hlpblanksub", [])
@@ -76,14 +60,14 @@ topics =
                 	("Help Display", "hlps2", "hlpblanksub", []),
                 	("Loadout Screen", "hlps3", "hlpblanksub", 
 			[
-                  	("Ships", "hlps3a", "hlpblanksub", []),
+                  		("Ships", "hlps3a", "hlpblanksub", []),
 		 		("Weapons & Equipment", "hlps3b", "hlpblanksub", [])
-                  ]),
+                  	]),
 	   		("Combat HUD", "hlps4", "hlps4def", 
 			[
 				("HUD Instruments", "hlps4a", "hlpblanksub", []),
 		 		("Target HUD", "hlps4b", "hlpblanksub", []),
-                        ("Peripheral Radar", "hlps4c", "hlpblanksub", [])
+                        	("Peripheral Radar", "hlps4c", "hlpblanksub", [])
 			]),
                 	("Inventory Display", "hlps5", "hlpblanksub", []),
                 	("Command View", "hlps6", "hlps6def", []),
@@ -100,57 +84,41 @@ topics =
             [
             	("Game Progression", "hlpc1", "hlpc1def", 
 			[
-	            	("Beginning", "hlpc1a", "hlpc1def", []),
-	            	("Middle", "hlpc1b", "hlpc1def", []),
-	            	("End", "hlpc1c", "hlpc1def", [])
+	            		("Beginning", "hlpc1a", "hlpc1def", []),
+	            		("Middle", "hlpc1b", "hlpc1def", []),
+	            		("End", "hlpc1c", "hlpc1def", [])
 			]),
                 	("Communication", "hlpc2", "hlpblanksub", 
 			[
 				("Chat", "hlpc2a", "hlpblanksub", []),
-	            	("Recipient", "hlpc2b", "hlpblanksub", []),
-	            	("Wings", "hlpc2c", "hlpblanksub", []),
-	            	("Voice Chats", "hlpc2d", "hlpblanksub", []),
-	            	("Teamspeak", "hlpc2e", "hlpblanksub", [])
+	            		("Recipient", "hlpc2b", "hlpblanksub", []),
+	            		("Wings", "hlpc2c", "hlpblanksub", []),
+	            		("Voice Chats", "hlpc2d", "hlpblanksub", [])
 			]),
                 	("Financial System", "hlpc4", "hlpblanksub", 
 			[
-				("Mining", "hlpc4c0", "hlpblanksub", []),
-		 		("Payday", "hlpc4c1", "hlpblanksub", []),
-		 		("Pay Split", "hlpc4c2", "hlpblanksub", []),
-			 	("Donation System", "hlpc4c3", "hlpblanksub", []),
-		 		("Commander's Options", "hlpc4c4", "hlpblanksub", []),
-		 		("Player's Options", "hlpc4c5", "hlpblanksub", []),
-			 	("Partial Investment", "hlpc4c6", "hlpblanksub", 
-				[
-	            		("With Bios", "hlpc4c6a", "hlpblanksub", []),
-	            		("Examples", "hlpc4c6b", "hlpblanksub", [])
-				]),
-			 	("Mutiny", "hlpc4c7", "hlpblanksub", [])
+				("Mining", "hlpc4c0", "hlpblanksub", [])
 
 			]),
 			("Pilot Roles", "hlpc5", "hlpblanksub", []),
 			("Commander", "hlpc6", "hlpblanksub", []),
-			("Controls", "hlpc7", "hlpblanksub", 
-			[
-                		("Keyboard", "hlpc7a", "hlpc7adef", []),
-                		("Joystick", "hlpc7b", "hlpc7bdef", []),
-                		("Configure Controls", "hlpc7c", "hlpc7cdef", [])
-			]),
+                	("Controls", "hlpc7", "hlpblanksub", []),
 			("Common Mistakes", "hlpc8", "hlpblanksub", [])
             ]
     	),
-	("FACTION INFORMATION", "hlpF", "hlpblanksub", 
+	("FACTIONS", "hlpF", "hlpFsub", 
 	[
-		("Iron Coalition", "hlpIC", "hlpblanksub", []),
-		("GigaCorp", "hlpGigaCorp", "hlpblanksub", []),
-		("Bios", "hlpBios", "hlpblanksub", []),
 		("Belters", "hlpBelters", "hlpblanksub", []),
-		("Rixian Unity", "hlpRixian", "hlpblanksub", []),
+		("Bios", "hlpBios", "hlpblanksub", []),
+		("Draconium", "hlpDrac", "hlpblanksub", []),
 		("Dreghklar", "hlpDreg", "hlpblanksub", []),
 		("Ga'Tarran", "hlpGT", "hlpblanksub", []),
-		("Technoflux", "hlpTechno", "hlpblanksub", []),
-		("Pheonix", "hlpPheonix", "hlpblanksub", []),
-		("Pheonix Battle Manual", "hlpPheonixBattle", "hlpblanksub", [])
+		("GigaCorp", "hlpGigaCorp", "hlpblanksub", []),
+		("Iron Coalition", "hlpIC", "hlpblanksub", []),
+		("Omicron Hive", "hlpOmicron", "hlpblanksub", []),
+		("Phoenix", "hlpPheonix", "hlpblanksub", []),
+		("Rixian Unity", "hlpRixian", "hlpblanksub", []),
+		("Technoflux", "hlpTechno", "hlpblanksub", [])
 	]),
 	(
             "TECH PATHS", "hlpd0", "hlpblanksub",
@@ -169,8 +137,8 @@ topics =
 			]),
                 	("Supremacy", "hlpd3", "hlpblanksub", 
 			[
-            		("Fighter", "hlpd3a", "hlpblanksub", []),
-            		("Fig/Bomber", "hlpd3b", "hlpblanksub", [])
+            			("Fighter", "hlpd3a", "hlpblanksub", []),
+            			("Fig/Bomber", "hlpd3b", "hlpblanksub", [])
 			]),
 			("Tactical", "hlpd4", "hlpblanksub", 
 			[
@@ -192,7 +160,6 @@ topics =
         (
             "QUICK REFERENCE", "hlpe0", "hlpblanksub",
          	[
-		("About QR", "hlpe00", "hlpblanksub", []),
 		("Crash Course", "hlpe0a", "hlpblanksub",
 		[
 			("Flying Around", "hlpe1", "hlpblanksub", []),
@@ -329,14 +296,14 @@ navPane                =
     );
 
 mainPageScrollBar      = ScrollBarPane(Point(16, 231));
-mainPage               = PagePane(Point(309, 231), mainPageScrollBar); //PagePane(Point(309, 231), mainPageScrollBar); 
+mainPage               = PagePane(Point(309, 231), mainPageScrollBar); 
 secondaryPageScrollBar = ScrollBarPane(Point(16, 62));
 secondaryPage          = PagePane(Point(309, 62), secondaryPageScrollBar);
 backButton             = SoundButtonPane(ImportImage("btnprevioustopicbmp",  true), ButtonNormal, false, negativeButtonClickSoundId);
 closeButton            = SoundButtonPane(ImportImage("btnclosepanebmp", true), ButtonNormal, false, negativeButtonClickSoundId);
 
-titlePane			= StringPane("FAZ HELP MENU", white,	Point(300, 30), JustifyLeft, hugeBoldFont);
-bottomPane			= StringPane("www.allegacademy.org", white,	Point(300, 30), JustifyLeft, largeBoldFont);
+titlePane			= StringPane("Allegiance Help Menu", white,	Point(360, 35), JustifyLeft, largeBoldFont);
+//bottomPane			= StringPane("www.allegacademy.org", white,	Point(300, 30), JustifyLeft, largeBoldFont);
 //academyBar          = ImagePane( ImportImage("hlpacademybarbmp",true), [] );
 helpPane = 
     ImagePane(
@@ -349,8 +316,8 @@ helpPane =
             (secondaryPageScrollBar, Point( 504, 294)),
             (backButton,             Point(  25, 360)),
             (closeButton,            Point( 501,  12)),
-		(titlePane,				 Point( 260,  14)),// Point( 260,  14)),
+		(titlePane,				 Point( 270,  18))
 		//(academyBar,				 Point( 150,  362)),
-		(bottomPane,			Point( 260,  370))// Point( 260,  370)),
+		//(bottomPane,			Point( 260,  370))
         ]
     );

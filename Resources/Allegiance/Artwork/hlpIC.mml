@@ -1,6 +1,5 @@
-<Color|yellow>Shizoku's DN 00.04.50 Faction Strategies<Color|white><p><p>
-
-<Font|headerFont>IRON COALITION<p><p><Image|hlpblank><Image|hlpblank><Image|hlpblank><Image|hlpiclogo>
+<Color|yellow>Pcore005 Faction Strategies<Color|white><p><p>
+<Font|headerFont>IRON COALITION
 <p><p><Font|subheaderFont>FACTION PERKS
     <p><p><Bullet|hlpbullet|Medium Hull(.95)>
 	<Bullet|hlpbullet|Strong station hull and shield (1.15)>
@@ -14,7 +13,7 @@
 	<Bullet|hlpbullet|Cheaper Capital Ships>
 <p><p><Font|subheaderFont>FACTION WEAKNESSES
     <p><p><Bullet|hlpbullet|High Signature (.85)>
-    <Bullet|hlpbullet|Slow miners(.7) and yeild of (1.0)>
+    <Bullet|hlpbullet|Slow miners(.85) and yeild of (1.0)>
     <Bullet|hlpbullet|Ripping miners(also an advantage, but if you aren't in control at all times, they will be a weakness>
     <Bullet|hlpbullet|Slow build times(2min for op/tele, 4min for tech)>
     <Bullet|hlpbullet|Lower Starting Money(-.125)>
