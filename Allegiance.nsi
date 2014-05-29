@@ -103,16 +103,16 @@ Section "${SHORT_PRODUCT_NAME} ${PRODUCT_VERSION} Game" SECgame
   ; Copy Beta
   SetOutPath "$INSTDIR\Beta"
   File /r /x .svn ".\Resources\Allegiance\*.*" ;/x .svn excludes SVN folders
-  
-  ; Copy ACSS
-  SetOutPath "$INSTDIR"
-  File /r /x .svn ".\Resources\ACSS\*.*" ;/x .svn excludes SVN folders
-  
+
   ; Remove all .ds files
   IfFileExists "$INSTDIR\*.ds" DeleteDS DoNotDeleteDS
   DeleteDS:
   Delete "$INSTDIR\*.ds"
   DoNotDeleteDS:
+
+  ; Copy ACSS
+  SetOutPath "$INSTDIR"
+  File /r /x .svn ".\Resources\ACSS\*.*" ;/x .svn excludes SVN folders
   
   SetDetailsPrint listonly
   DetailPrint "... done"
